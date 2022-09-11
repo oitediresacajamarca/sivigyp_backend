@@ -1,4 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { DistritosEntity } from 'src/comunes/entidades/distritos.entity';
@@ -8,6 +17,10 @@ import { IpressEntity } from 'src/comunes/entidades/ipress.entity';
 import { PersonaEntity } from 'src/comunes/entidades/persona.entity';
 import { ProvinciasEntity } from 'src/comunes/entidades/provincias.entity';
 import { Repository } from 'typeorm';
+import { DatosComplementarios } from './dtos/datos_complementarios';
+import { NuevoPacienteDto } from './dtos/nuevo-paciente-dto';
+import { Response } from 'express';
+import { PaginacionDto } from './dtos/paginacion.dto';
 
 @Controller('gestante')
 export class GestanteController {
@@ -61,12 +74,20 @@ export class GestanteController {
     return resp_final;
   }
   @Get('persona_hc_por_ipress/:ipress')
-  async devolver_gestante_hc_por_ipress(@Param('ipress') ipress: string) {
+  async devolver_gestante_hc_por_ipress(
+    @Param('ipress') ipress: string,
+    @Query() paginacion: PaginacionDto,
+  ) {
+    const { limit = 10, skip = 1 } = paginacion;
     const hc_resp = await this.Hcl_Rep.find({
       where: { COD_IPRESS: ipress },
-      skip: 1,
-      take: 7,
+      skip: skip,
+      take: limit,
     });
+    const cantidad_reg = await this.Hcl_Rep.count({
+      where: { COD_IPRESS: ipress },
+    });
+    const cantidad_paginas = (cantidad_reg / limit) | 0;
     let resp_final = await Promise.all(
       hc_resp.map(async (hc) => {
         const per = await this.Persona_Rep.find({
@@ -80,7 +101,11 @@ export class GestanteController {
     resp_final = await this.aniadir_ditrito(resp_final);
     resp_final = await this.aniadir_provincia(resp_final);
 
-    return resp_final;
+    return {
+      datos: resp_final,
+      cantidad_reg: cantidad_reg,
+      cantidad_paginas: cantidad_paginas,
+    };
   }
 
   @Get('persona_hc_por_ipress/:numero_documento/:ipress')
@@ -141,6 +166,62 @@ export class GestanteController {
     return resp_final;
   }
 
+  @Post('persona_hc/:numero_documento')
+  async nueva_hc(
+    @Param('numero_documento') nro_documento: string,
+    @Body('persona') persona: NuevoPacienteDto,
+    @Body('datos_complementarios') datos_complementarios: DatosComplementarios,
+    @Res() res: Response,
+  ) {
+    const personas = await this.Persona_Rep.find({
+      where: { NRO_DOCUMENTO: persona.nro_documento },
+    });
+    if (personas.length > 0) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        mensaje: 'ya existe persona registrada con el numero de documento',
+      });
+    }
+
+    const resp = await this.Persona_Rep.insert({
+      NRO_DOCUMENTO: persona.nro_documento,
+      APELLIDO_PAT: persona.apellido_paterno,
+      APELLIDO_MAT: persona.apellido_paterno,
+      CORREO: persona.correo,
+      DIRECCION: persona.direccion,
+      FECHA_NAC: persona.fecha_nacimiento,
+      ID_DISTRITO: persona.distrito,
+      ID_GENERO: 2,
+      ID_TIPOD: 1,
+      NOMBRES: persona.nombres,
+      TELEFONO: persona.numero_telefono,
+    });
+
+    const resp_comp = await this.Hcl_Rep.insert({
+      BENEFICIARIA_JUNTOS: persona.beneficiaria_juntos,
+      COD_IPRESS: persona.COD_IPRESS,
+      ESTADO_CIVIL: datos_complementarios.estado_civil,
+      ESTADO_HC: 1,
+      FACTOR_SANGUINEO: datos_complementarios.factor_sanguineo,
+      FEC_REGISTRO: new Date(),
+      GRUPO_SANGUINEO: datos_complementarios.grupo_sanguinieo,
+      ID_CENTRO_POBLADO: persona.centro_poblado,
+      ID_GRADO_INSTRUCCION: datos_complementarios.grado_instruccion,
+      ID_PERSONA: resp.identifiers[0]['ID_PERSONA'],
+      IDIOMA: datos_complementarios.idioma,
+      RELIGION: datos_complementarios.religion,
+      TELEFONO: persona.numero_telefono,
+      TIPO_SEGURO: datos_complementarios.tipo_seguro,
+      NRO_HCL: persona.nro_documento,
+    });
+
+    res.status(HttpStatus.CREATED).json({
+      ...resp,
+      ...resp_comp,
+      mensaje: 'se registro con exito',
+      estado: 'OK',
+    });
+  }
+
   async aniadir_ipress(datos: any[]) {
     const resp = await Promise.all(
       datos.map(async (dat) => {
@@ -167,11 +248,10 @@ export class GestanteController {
   async aniadir_provincia(datos: any[]) {
     const resp = await Promise.all(
       datos.map(async (dat) => {
-        console.log(dat);
         const data = await this.Prov_Rep.findOne({
           where: { ID_PROVINCIA: dat.distrito.ID_PROVINCIA },
         });
-        console.log(data);
+
         return { ...dat, provincia: { ...data } };
       }),
     );
