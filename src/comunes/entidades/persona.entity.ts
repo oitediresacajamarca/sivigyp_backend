@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TrabajadorIpressEntity } from './trabajador-ipress.entity';
 
 @Entity('PERSONA')
 export class PersonaEntity {
@@ -26,4 +27,9 @@ export class PersonaEntity {
   TELEFONO: string;
   @Column()
   CORREO: string;
+  @OneToMany(
+    () => TrabajadorIpressEntity,
+    (trabajadores) => trabajadores.persona,
+  )
+  trabajadores: TrabajadorIpressEntity[];
 }

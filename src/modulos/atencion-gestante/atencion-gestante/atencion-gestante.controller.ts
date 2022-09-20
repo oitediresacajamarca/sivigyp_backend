@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Patch,
@@ -35,8 +36,6 @@ export class AtencionGestanteController {
     const hc = await this.Historia_Clinica_rep.findOne({
       where: { NRO_HCL: nro_historia_clinica },
     });
-    console.log(informacion_gestante_form);
-    console.log(informacion_para_gestacion_form);
 
     if (hc == null) {
       throw new NotFoundException('NO EXISTE HISTORIA CLINICA');
@@ -69,7 +68,11 @@ export class AtencionGestanteController {
           informacion_gestante_form.recien_nacidos_termino,
       });
 
-      this.Atencion_Rep.save(atencion);
+      try {
+        await this.Atencion_Rep.save(atencion);
+      } catch (e) {
+        throw new InternalServerErrorException('NO SE GUARDO EL PACIENTE');
+      }
 
       return atencion;
     }
@@ -85,7 +88,6 @@ export class AtencionGestanteController {
     const atencion = await this.Atencion_Rep.findOne({
       where: { ID_HC: hcl.ID_HC },
     });
-    console.log(atencion);
 
     if (atencion == null) {
       throw new NotFoundException('No existe Atencion');
@@ -118,11 +120,7 @@ export class AtencionGestanteController {
       where: { ID_HC: hcl.ID_HC },
     });
 
-    console.log(hcl);
-    console.log(informacion_gestante_form);
-    console.log(informacion_para_gestacion_form);
-    console.log(informacion_gestante_form.observaciones);
-    this.Atencion_Rep.save({
+    const atencion_act = await this.Atencion_Rep.save({
       ID_ATENCION: aten.ID_ATENCION,
       FEC_REGISTRO: informacion_gestante_form.fecha_registro,
       FECHA: informacion_gestante_form.fecha_registro,
@@ -145,5 +143,6 @@ export class AtencionGestanteController {
         informacion_gestante_form.recien_nacidos_prematuros,
       RECIEN_NACIDOS_TERMINO: informacion_gestante_form.recien_nacidos_termino,
     });
+    return atencion_act;
   }
 }
