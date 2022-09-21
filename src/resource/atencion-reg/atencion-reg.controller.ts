@@ -32,6 +32,10 @@ export class AtencionRegController {
       new Date(),
     );
   }
+  @Post('atender/:id_atencion')
+  atender(@Param('id_atencion') id_atencion: number, @Body() payload: any) {
+    return this.atencionRegService.atender(id_atencion, payload);
+  }
   @Get('atencion/:id_atencion')
   findByhc(@Param('id_atencion') id_atencion: number) {
     return this.atencionRegService.findOneID_ATENCION(id_atencion);
@@ -51,7 +55,7 @@ export class AtencionRegController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.atencionRegService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.atencionRegService.eliminar(id);
   }
 }

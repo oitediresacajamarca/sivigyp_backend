@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateAtencionRegDto } from './dto/create-atencion-reg.dto';
 import { UpdateAtencionRegDto } from './dto/update-atencion-reg.dto';
 import { AtencionReg } from './entities/atencion-reg.entity';
-import * as moment from 'moment';
+import * as moment from 'dayjs';
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
 import { AtencionRegInterface } from 'src/comunes/interfaces/atencion-reg.interface';
 
@@ -36,12 +36,16 @@ export class AtencionRegService {
       order: { FECHA_ATENCION_REG: 'DESC' },
     });
     const elegido = {};
-    let fecha_siguiente = new Date();
+    const hoy = new Date();
+    let fecha_siguiente = new Date(2500, 1, 1);
+
     const resp2 = resp.map((aten) => {
       let nuevo = {};
-      if (aten.FECHA_ATENCION_REG >= new Date()) {
+
+      if (aten.FECHA_ATENCION_REG > hoy) {
         nuevo = { ...aten, est: 'pendiente' };
-        if (aten.FECHA_ATENCION_REG <= fecha_siguiente) {
+
+        if (aten.FECHA_ATENCION_REG < fecha_siguiente) {
           fecha_siguiente = aten.FECHA_ATENCION_REG;
         }
       } else {
@@ -90,8 +94,10 @@ export class AtencionRegService {
     let citas: any[] = [];
     let semana_gestacion_it = 0;
     let fecha_programada_it = aten.FUR_ATENCION;
+    let count = 0;
 
     while (semana_gestacion_it < 30) {
+      count++;
       fecha_programada_it = moment(fecha_programada_it)
         .add(1, 'month')
         .toDate();
@@ -101,12 +107,15 @@ export class AtencionRegService {
         'weeks',
       );
       citas.push({
+        numero_cita: count,
         fecha_cita: fecha_programada_it,
         semana_gestacion: semana_gestacion_it,
+        ESTADO_ATENCION: 1,
       });
     }
 
     while (semana_gestacion_it >= 30 && semana_gestacion_it < 35) {
+      count++;
       fecha_programada_it = moment(fecha_programada_it).add(15, 'day').toDate();
 
       semana_gestacion_it = moment(fecha_programada_it).diff(
@@ -114,12 +123,15 @@ export class AtencionRegService {
         'weeks',
       );
       citas.push({
+        numero_cita: count,
         fecha_cita: fecha_programada_it,
         semana_gestacion: semana_gestacion_it,
+        ESTADO_ATENCION: 1,
       });
     }
 
     while (semana_gestacion_it >= 35 && semana_gestacion_it < 42) {
+      count++;
       fecha_programada_it = moment(fecha_programada_it).add(7, 'day').toDate();
 
       semana_gestacion_it = moment(fecha_programada_it).diff(
@@ -127,8 +139,10 @@ export class AtencionRegService {
         'weeks',
       );
       citas.push({
+        numero_cita: count,
         fecha_cita: fecha_programada_it,
         semana_gestacion: semana_gestacion_it,
+        ESTADO_ATENCION: 1,
       });
     }
     citas = citas.filter((cita) => {
@@ -143,10 +157,35 @@ export class AtencionRegService {
         ESTADO_ATENCION: cita.ESTADO_ATENCION,
         USU: '',
         ESTADO_CERRADO: 0,
+        CORRELATIVO: cita.numero_cita,
+        FEC_REGISTRO: new Date(),
       };
     });
     const resp4 = await this.atencionreg_rep.save(atenciones);
+    const resp5 = await this.findOneID_ATENCION(id_atencion);
 
-    return resp4;
+    return resp5;
+  }
+
+  async atender(id_atencion: number, payload: any) {
+    const atencion_actualizar = await this.atencionreg_rep.findOne({
+      where: {
+        ID_ATENCION_REG: id_atencion,
+      },
+    });
+    atencion_actualizar.ESTADO_ATENCION = 2;
+
+    const resp = await this.atencionreg_rep.save(atencion_actualizar);
+    return resp;
+  }
+  async eliminar(id_atencion: number) {
+    const atencion_actualizar = await this.atencionreg_rep.findOne({
+      where: {
+        ID_ATENCION_REG: id_atencion,
+      },
+    });
+
+    const resp = await this.atencionreg_rep.remove(atencion_actualizar);
+    return resp;
   }
 }

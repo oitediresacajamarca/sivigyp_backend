@@ -16,4 +16,8 @@ export class AtencionReg {
   USU: string;
   @Column()
   ESTADO_CERRADO: number;
+  @Column()
+  CORRELATIVO: number;
+  @Column()
+  FEC_REGISTRO: Date;
 }
