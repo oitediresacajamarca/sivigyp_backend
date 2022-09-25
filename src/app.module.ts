@@ -23,6 +23,10 @@ import { PersonalModule } from './resource/personal/personal.module';
 import { TrabajadorIpressEntity } from './comunes/entidades/trabajador-ipress.entity';
 import { ProfesionEntity } from './comunes/entidades/profesion.entity';
 import { CondicionLaboralEntity } from './comunes/entidades/condicion-laboral.entity';
+import { MicroredEntity } from './comunes/entidades/microred.entity';
+import { RedEntity } from './comunes/entidades/red.entity';
+import { AtencionPartoModule } from './resource/atencion-parto/atencion-parto.module';
+import { AtencionPartoEntity } from './resource/atencion-parto/entities/atencion-parto.entity';
 
 @Module({
   imports: [
@@ -50,6 +54,9 @@ import { CondicionLaboralEntity } from './comunes/entidades/condicion-laboral.en
         TrabajadorIpressEntity,
         ProfesionEntity,
         CondicionLaboralEntity,
+        MicroredEntity,
+        RedEntity,
+        AtencionPartoEntity,
       ],
       extra: {
         validateConnection: false,
@@ -60,11 +67,11 @@ import { CondicionLaboralEntity } from './comunes/entidades/condicion-laboral.en
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: 'localhost',
+      host: '172.18.20.20',
       port: 1433,
       username: 'sa',
       synchronize: false,
-      password: '.',
+      password: 'Intercambio1080',
       database: 'risc_2030',
       entities: [MstPacienteEntity],
       extra: {
@@ -79,6 +86,7 @@ import { CondicionLaboralEntity } from './comunes/entidades/condicion-laboral.en
     AtencionRegModule,
     AutentificacionModule,
     PersonalModule,
+    AtencionPartoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

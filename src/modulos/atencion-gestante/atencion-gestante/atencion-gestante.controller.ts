@@ -86,7 +86,7 @@ export class AtencionGestanteController {
     });
 
     const atencion = await this.Atencion_Rep.findOne({
-      where: { ID_HC: hcl.ID_HC },
+      where: { ID_HC: hcl.ID_HC, ESTADO_ATENCION: 0 },
     });
 
     if (atencion == null) {
@@ -117,7 +117,7 @@ export class AtencionGestanteController {
     });
 
     const aten = await this.Atencion_Rep.findOne({
-      where: { ID_HC: hcl.ID_HC },
+      where: { ID_HC: hcl.ID_HC, ESTADO_ATENCION: 0 },
     });
 
     const atencion_act = await this.Atencion_Rep.save({

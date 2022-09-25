@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { HistoriaClinicaEntity } from './historia-clinica.entity';
 
 @Entity('CENTRO_POBLADO')
 export class CentroPobladoEntity {
@@ -12,4 +19,8 @@ export class CentroPobladoEntity {
   LONGITUD: number;
   @Column()
   LATITUD: number;
+
+  @OneToMany(() => HistoriaClinicaEntity, (data) => data.CENTRO_POBLADO)
+  @JoinColumn({ name: 'ID_CENTROP' })
+  HISTORIAS_CLINICAS: HistoriaClinicaEntity[];
 }

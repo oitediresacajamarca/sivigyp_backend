@@ -8,7 +8,8 @@ import { UpdateAtencionRegDto } from './dto/update-atencion-reg.dto';
 import { AtencionReg } from './entities/atencion-reg.entity';
 import * as moment from 'dayjs';
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
-import { AtencionRegInterface } from 'src/comunes/interfaces/atencion-reg.interface';
+
+import { Between } from 'typeorm';
 
 @Injectable()
 export class AtencionRegService {
@@ -178,6 +179,18 @@ export class AtencionRegService {
     const resp = await this.atencionreg_rep.save(atencion_actualizar);
     return resp;
   }
+
+  async noatender(id_atencion: number, payload: any) {
+    const atencion_actualizar = await this.atencionreg_rep.findOne({
+      where: {
+        ID_ATENCION_REG: id_atencion,
+      },
+    });
+    atencion_actualizar.ESTADO_ATENCION = 3;
+
+    const resp = await this.atencionreg_rep.save(atencion_actualizar);
+    return resp;
+  }
   async eliminar(id_atencion: number) {
     const atencion_actualizar = await this.atencionreg_rep.findOne({
       where: {
@@ -187,5 +200,22 @@ export class AtencionRegService {
 
     const resp = await this.atencionreg_rep.remove(atencion_actualizar);
     return resp;
+  }
+  reporte_gestantes(ipress: string, body: any) {
+    const ateciones_reg = this.atencionreg_rep.find({
+      where: { FECHA_ATENCION_REG: Between(body.desde, body.hasta) },
+      relations: [
+        'ATENCION',
+        'ATENCION.HistoriaClinica',
+        'ATENCION.HistoriaClinica.PERSONA',
+        'ATENCION.HistoriaClinica.PERSONA.DISTRITO',
+        'ATENCION.HistoriaClinica.PERSONA.DISTRITO.PROVINCIA',
+        'ATENCION.HistoriaClinica.IPRESS',
+        'ATENCION.HistoriaClinica.IPRESS.MICRORED',
+        'ATENCION.HistoriaClinica.IPRESS.MICRORED.RED',
+        'ATENCION.HistoriaClinica.CENTRO_POBLADO',
+      ],
+    });
+    return ateciones_reg;
   }
 }

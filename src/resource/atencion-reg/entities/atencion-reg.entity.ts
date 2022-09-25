@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('ATENCION_REG')
 export class AtencionReg {
@@ -20,4 +27,12 @@ export class AtencionReg {
   CORRELATIVO: number;
   @Column()
   FEC_REGISTRO: Date;
+  @OneToOne(
+    () => AtencionEntity,
+    (data) => {
+      data.AtencionReg;
+    },
+  )
+  @JoinColumn({ name: 'ID_ATENCION' })
+  ATENCION?: AtencionEntity;
 }

@@ -1,4 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { AtencionEntity } from './atencion.entity';
+import { CentroPobladoEntity } from './centro-poblado.entity';
+import { IpressEntity } from './ipress.entity';
+import { PersonaEntity } from './persona.entity';
 
 @Entity('HISTORIA_CLINICA')
 export class HistoriaClinicaEntity {
@@ -34,4 +46,22 @@ export class HistoriaClinicaEntity {
   FEC_REGISTRO: Date;
   @Column()
   ESTADO_HC: number;
+
+  @BeforeInsert()
+  insertDates() {
+    this.RELIGION = this.RELIGION.toUpperCase();
+    this.IDIOMA = this.IDIOMA.toUpperCase();
+  }
+  @OneToMany(() => AtencionEntity, (data) => data.HistoriaClinica)
+  @JoinColumn({ name: 'ID_HC' })
+  Atenciones?: AtencionEntity[];
+  @ManyToOne(() => PersonaEntity, (data) => data.HISTORIAS)
+  @JoinColumn({ name: 'ID_PERSONA' })
+  PERSONA?: PersonaEntity;
+  @ManyToOne(() => IpressEntity, (data) => data.HISTORIAS_CLINICAS)
+  @JoinColumn({ name: 'COD_IPRESS' })
+  IPRESS?: IpressEntity;
+  @ManyToOne(() => CentroPobladoEntity, (data) => data.HISTORIAS_CLINICAS)
+  @JoinColumn({ name: 'ID_CENTRO_POBLADO' })
+  CENTRO_POBLADO?: CentroPobladoEntity;
 }

@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AtencionReg } from 'src/resource/atencion-reg/entities/atencion-reg.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { HistoriaClinicaEntity } from './historia-clinica.entity';
 
 @Entity('ATENCION')
 export class AtencionEntity {
@@ -40,4 +49,10 @@ export class AtencionEntity {
   OBSERVACIONES_FIN?: string;
   @Column()
   FEC_ACTUALIZACION?: Date;
+  @OneToOne(() => AtencionReg, (data) => data.ATENCION)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  AtencionReg?: AtencionReg;
+  @ManyToOne(() => HistoriaClinicaEntity, (data) => data.Atenciones)
+  @JoinColumn({ name: 'ID_HC' })
+  HistoriaClinica?: HistoriaClinicaEntity;
 }

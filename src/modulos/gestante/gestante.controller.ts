@@ -100,6 +100,7 @@ export class GestanteController {
     resp_final = await this.aniadir_ipress(resp_final);
     resp_final = await this.aniadir_ditrito(resp_final);
     resp_final = await this.aniadir_provincia(resp_final);
+    console.log(resp_final)
 
     return {
       datos: resp_final,
@@ -173,27 +174,28 @@ export class GestanteController {
     @Body('datos_complementarios') datos_complementarios: DatosComplementarios,
     @Res() res: Response,
   ) {
-    const personas = await this.Persona_Rep.find({
+    let personas = await this.Persona_Rep.find({
       where: { NRO_DOCUMENTO: persona.nro_documento },
     });
-    if (personas.length > 0) {
-      res.status(HttpStatus.NOT_FOUND).json({
-        mensaje: 'ya existe persona registrada con el numero de documento',
+    let resp: any;
+    if (personas.length == 0) {
+      const este = this.Persona_Rep.create({
+        NRO_DOCUMENTO: persona.nro_documento,
+        APELLIDO_PAT: persona.apellido_paterno,
+        APELLIDO_MAT: persona.apellido_paterno,
+        CORREO: persona.correo,
+        DIRECCION: persona.direccion,
+        FECHA_NAC: persona.fecha_nacimiento,
+        ID_DISTRITO: persona.distrito,
+        ID_GENERO: 2,
+        ID_TIPOD: 1,
+        NOMBRES: persona.nombres,
+        TELEFONO: persona.numero_telefono,
       });
+      resp = await this.Persona_Rep.save(este);
     }
-
-    const resp = await this.Persona_Rep.insert({
-      NRO_DOCUMENTO: persona.nro_documento,
-      APELLIDO_PAT: persona.apellido_paterno,
-      APELLIDO_MAT: persona.apellido_paterno,
-      CORREO: persona.correo,
-      DIRECCION: persona.direccion,
-      FECHA_NAC: persona.fecha_nacimiento,
-      ID_DISTRITO: persona.distrito,
-      ID_GENERO: 2,
-      ID_TIPOD: 1,
-      NOMBRES: persona.nombres,
-      TELEFONO: persona.numero_telefono,
+    personas = await this.Persona_Rep.find({
+      where: { NRO_DOCUMENTO: persona.nro_documento },
     });
 
     const resp_comp = await this.Hcl_Rep.insert({
@@ -203,10 +205,10 @@ export class GestanteController {
       ESTADO_HC: 1,
       FACTOR_SANGUINEO: datos_complementarios.factor_sanguineo,
       FEC_REGISTRO: new Date(),
-      GRUPO_SANGUINEO: datos_complementarios.grupo_sanguinieo,
+      GRUPO_SANGUINEO: datos_complementarios.grupo_sanguineo,
       ID_CENTRO_POBLADO: persona.centro_poblado,
       ID_GRADO_INSTRUCCION: datos_complementarios.grado_instruccion,
-      ID_PERSONA: resp.identifiers[0]['ID_PERSONA'],
+      ID_PERSONA: personas[0].ID_PERSONA,
       IDIOMA: datos_complementarios.idioma,
       RELIGION: datos_complementarios.religion,
       TELEFONO: persona.numero_telefono,
