@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('ATENCION_PARTO')
 export class AtencionPartoEntity {
@@ -30,4 +37,7 @@ export class AtencionPartoEntity {
   FEC_REGISTRO: Date;
   @Column()
   EDAD_GESTACIONAL: number;
+  @ManyToOne(() => AtencionEntity, (data) => data.PARTOS)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  ATENCION: AtencionEntity;
 }

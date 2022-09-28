@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import { getDataSourceName, InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { CreateAtencionRegDto } from './dto/create-atencion-reg.dto';
 import { UpdateAtencionRegDto } from './dto/update-atencion-reg.dto';
 import { AtencionReg } from './entities/atencion-reg.entity';
@@ -10,6 +10,7 @@ import * as moment from 'dayjs';
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
 
 import { Between } from 'typeorm';
+import { RptCbetaAcumEntity } from 'src/comunes/entidades/rpt_cbeta_acum.entity';
 
 @Injectable()
 export class AtencionRegService {
@@ -18,6 +19,8 @@ export class AtencionRegService {
     private atencionreg_rep: Repository<AtencionReg>,
     @InjectRepository(AtencionEntity, 'db_svgyp')
     private atencion_rep: Repository<AtencionEntity>,
+    @InjectRepository(RptCbetaAcumEntity, 'BDHIS_MINSA')
+    private rpt_cbeta: Repository<RptCbetaAcumEntity>,
   ) {}
   create(createAtencionRegDto: CreateAtencionRegDto) {
     return 'This action adds a new atencionReg';
@@ -43,7 +46,7 @@ export class AtencionRegService {
     const resp2 = resp.map((aten) => {
       let nuevo = {};
 
-      if (aten.FECHA_ATENCION_REG > hoy) {
+      if (moment(aten.FECHA_ATENCION_REG).diff(hoy, 'days') >= 0) {
         nuevo = { ...aten, est: 'pendiente' };
 
         if (aten.FECHA_ATENCION_REG < fecha_siguiente) {
@@ -68,8 +71,11 @@ export class AtencionRegService {
       }
       return nuevo;
     });
+    const resp4 = resp3.filter((dat) => {
+      return dat.ultima == true;
+    });
 
-    return resp3;
+    return resp4;
   }
 
   update(id: number, updateAtencionRegDto: UpdateAtencionRegDto) {
@@ -147,7 +153,7 @@ export class AtencionRegService {
       });
     }
     citas = citas.filter((cita) => {
-      return cita.fecha_cita >= new Date();
+      return moment(cita.fecha_cita).diff(new Date(), 'days') >= 0;
     });
 
     const atenciones: AtencionReg[] = citas.map((cita) => {
@@ -160,6 +166,7 @@ export class AtencionRegService {
         ESTADO_CERRADO: 0,
         CORRELATIVO: cita.numero_cita,
         FEC_REGISTRO: new Date(),
+        OBSERVACIONES: cita.OBSERVACION,
       };
     });
     const resp4 = await this.atencionreg_rep.save(atenciones);
@@ -175,8 +182,20 @@ export class AtencionRegService {
       },
     });
     atencion_actualizar.ESTADO_ATENCION = 2;
+    atencion_actualizar.OBSERVACIONES = payload.OBSERVACION;
 
     const resp = await this.atencionreg_rep.save(atencion_actualizar);
+    return resp;
+  }
+
+  async reprogramar(id_atencion: number, payload: any) {
+    const atencion = await this.atencionreg_rep.findOne({
+      where: { ID_ATENCION_REG: id_atencion },
+    });
+    atencion.OBSERVACIONES = payload.OBSERVACION;
+    atencion.FECHA_ATENCION_REG = payload.FECHA;
+
+    const resp = await this.atencionreg_rep.save(atencion);
     return resp;
   }
 
@@ -187,6 +206,7 @@ export class AtencionRegService {
       },
     });
     atencion_actualizar.ESTADO_ATENCION = 3;
+    atencion_actualizar.OBSERVACIONES = payload.OBSERVACION;
 
     const resp = await this.atencionreg_rep.save(atencion_actualizar);
     return resp;
@@ -216,6 +236,39 @@ export class AtencionRegService {
         'ATENCION.HistoriaClinica.CENTRO_POBLADO',
       ],
     });
+
     return ateciones_reg;
+  }
+  async pendientes(ipress: string, body: any) {
+    const fecha = moment(new Date(body.fecha)).toDate();
+    const anio = fecha.getFullYear();
+    const mes = fecha.getMonth() + 1;
+    const day = fecha.getDate();
+
+    const rest = await this.atencionreg_rep
+      .createQueryBuilder('ATENCION_REG')
+      .leftJoinAndSelect('ATENCION_REG.ATENCION', 'ATENCION')
+      .leftJoinAndSelect('ATENCION.HistoriaClinica', 'HistoriaClinica')
+      .leftJoinAndSelect('HistoriaClinica.PERSONA', 'PERSONA')
+      .leftJoinAndSelect('ATENCION.RIESGOS', 'RIESGOS')
+      .where(
+        'HistoriaClinica.COD_IPRESS=:IPRESS AND day(ATENCION_REG.FECHA_ATENCION_REG)=:day AND month(ATENCION_REG.FECHA_ATENCION_REG)=:mes AND year(ATENCION_REG.FECHA_ATENCION_REG)=:anio',
+        { IPRESS: ipress, anio: anio, mes: mes, day: day },
+      )
+      .andWhere('ATENCION_REG.ESTADO_ATENCION IN (1,0)')
+      .andWhere('ATENCION_REG.ESTADO_CERRADO IN (0)')
+
+      .orderBy('ATENCION_REG.FECHA_ATENCION_REG', 'DESC')
+      .limit(body.len)
+      .skip(body.pagina)
+      .getMany();
+
+    /*  const rest2 = await this.atencionreg_rep.find({
+      where: { FECHA_ATENCION_REG: LessThan(fecha) },
+      relations: ['ATENCION', 'ATENCION.HistoriaClinica.PERSONA'],
+      order: { FECHA_ATENCION_REG: 'DESC' },
+    });*/
+
+    return rest;
   }
 }

@@ -27,6 +27,7 @@ import { MicroredEntity } from './comunes/entidades/microred.entity';
 import { RedEntity } from './comunes/entidades/red.entity';
 import { AtencionPartoModule } from './resource/atencion-parto/atencion-parto.module';
 import { AtencionPartoEntity } from './resource/atencion-parto/entities/atencion-parto.entity';
+import { RptCbetaAcumEntity } from './comunes/entidades/rpt_cbeta_acum.entity';
 
 @Module({
   imports: [
@@ -67,19 +68,45 @@ import { AtencionPartoEntity } from './resource/atencion-parto/entities/atencion
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: '172.18.20.20',
+      host: 'localhost',
       port: 1433,
       username: 'sa',
       synchronize: false,
-      password: 'Intercambio1080',
+      password: '.',
       database: 'risc_2030',
       entities: [MstPacienteEntity],
       extra: {
         validateConnection: false,
         trustServerCertificate: true,
+        query_timeout: 80000,
+        statement_timeout: 80000,
       },
       options: { encrypt: false },
       name: 'risc_2030',
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mssql',
+      host: 'localhost',
+      port: 1433,
+      username: 'sa',
+      synchronize: false,
+      password: '.',
+      database: 'BDHIS_MINSA',
+      entities: [RptCbetaAcumEntity],
+      pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000,
+      },
+      extra: {
+        validateConnection: false,
+        trustServerCertificate: true,
+        query_timeout: 80000,
+        statement_timeout: 80000,
+      },
+      options: { encrypt: false },
+      requestTimeout: 60_000,
+      name: 'BDHIS_MINSA',
     }),
     MaestrosModule,
     AtencionGestanteModule,

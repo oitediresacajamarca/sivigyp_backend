@@ -27,6 +27,8 @@ export class AtencionReg {
   CORRELATIVO: number;
   @Column()
   FEC_REGISTRO: Date;
+  @Column()
+  OBSERVACIONES: string;
   @OneToOne(
     () => AtencionEntity,
     (data) => {

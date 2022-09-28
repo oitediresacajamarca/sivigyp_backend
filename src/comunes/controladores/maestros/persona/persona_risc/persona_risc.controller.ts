@@ -18,7 +18,6 @@ export class PersonaRiscController {
     let per = await this.Persona_rep.findOne({
       where: { numero_documento: numero_documento },
     });
-    console.log(per);
 
     if (per == null) {
       const busc = await this.buscar_en_api_reniec(numero_documento);

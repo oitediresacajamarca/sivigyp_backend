@@ -81,6 +81,7 @@ export class GestanteController {
     const { limit = 10, skip = 1 } = paginacion;
     const hc_resp = await this.Hcl_Rep.find({
       where: { COD_IPRESS: ipress },
+      relations: ['PERSONA'],
       skip: skip,
       take: limit,
     });
@@ -100,7 +101,6 @@ export class GestanteController {
     resp_final = await this.aniadir_ipress(resp_final);
     resp_final = await this.aniadir_ditrito(resp_final);
     resp_final = await this.aniadir_provincia(resp_final);
-    console.log(resp_final)
 
     return {
       datos: resp_final,
@@ -191,6 +191,7 @@ export class GestanteController {
         ID_TIPOD: 1,
         NOMBRES: persona.nombres,
         TELEFONO: persona.numero_telefono,
+        TELEFONO_ADICIONAL: persona.numero_telefono_adicional,
       });
       resp = await this.Persona_Rep.save(este);
     }

@@ -1,13 +1,17 @@
+import { AtencionPartoEntity } from 'src/resource/atencion-parto/entities/atencion-parto.entity';
 import { AtencionReg } from 'src/resource/atencion-reg/entities/atencion-reg.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { HistoriaClinicaEntity } from './historia-clinica.entity';
+import { RiesgosEntity } from './riesgos.entity';
 
 @Entity('ATENCION')
 export class AtencionEntity {
@@ -49,10 +53,25 @@ export class AtencionEntity {
   OBSERVACIONES_FIN?: string;
   @Column()
   FEC_ACTUALIZACION?: Date;
-  @OneToOne(() => AtencionReg, (data) => data.ATENCION)
+  @Column()
+  ESTADO_ACTUAL_GESTANTE?: string;
+  @OneToMany(() => AtencionReg, (data) => data.ATENCION)
   @JoinColumn({ name: 'ID_ATENCION' })
   AtencionReg?: AtencionReg;
   @ManyToOne(() => HistoriaClinicaEntity, (data) => data.Atenciones)
   @JoinColumn({ name: 'ID_HC' })
   HistoriaClinica?: HistoriaClinicaEntity;
+  @OneToMany(() => AtencionPartoEntity, (data) => data.ATENCION)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  PARTOS: AtencionPartoEntity[];
+  @ManyToMany(() => RiesgosEntity, (data) => data.ATENCIONES)
+  @JoinTable({
+    name: 'ATENCION_RIESGO',
+    joinColumn: { name: 'ID_ATENCION', referencedColumnName: 'ID_ATENCION' },
+    inverseJoinColumn: {
+      name: 'ID_RIESGO',
+      referencedColumnName: 'ID_RIESGO',
+    },
+  })
+  RIESGOS: RiesgosEntity[];
 }

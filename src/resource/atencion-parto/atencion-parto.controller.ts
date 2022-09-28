@@ -20,6 +20,11 @@ export class AtencionPartoController {
     return this.atencionPartoService.create(createAtencionPartoDto);
   }
 
+  @Get('atencion/:id_atencion')
+  findPartos_atencion(@Param('id_atencion') id_atencion: number) {
+    return this.atencionPartoService.devolver_partos_por_atencion(id_atencion);
+  }
+
   @Get()
   findAll() {
     return this.atencionPartoService.findAll();

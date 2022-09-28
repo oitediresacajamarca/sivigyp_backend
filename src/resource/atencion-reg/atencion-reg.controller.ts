@@ -32,14 +32,24 @@ export class AtencionRegController {
       new Date(),
     );
   }
+  @Post('atencion/generar_atencion_reg_sig/:id_atencion')
+  generar_atencion_reg_sig(@Param('id_atencion') id_atencion: number) {
+    return this.atencionRegService.generar_atencion_reg(
+      id_atencion,
+      new Date(),
+    );
+  }
   @Post('atender/:id_atencion')
   atender(@Param('id_atencion') id_atencion: number, @Body() payload: any) {
     return this.atencionRegService.atender(id_atencion, payload);
   }
   @Post('noatender/:id_atencion')
   noatender(@Param('id_atencion') id_atencion: number, @Body() payload: any) {
-    console.log(id_atencion);
     return this.atencionRegService.noatender(id_atencion, payload);
+  }
+  @Post('reprogramar/:id_atencion')
+  reprogramar(@Param('id_atencion') id_atencion: number, @Body() payload: any) {
+    return this.atencionRegService.reprogramar(id_atencion, payload);
   }
   @Get('atencion/:id_atencion')
   findByhc(@Param('id_atencion') id_atencion: number) {
@@ -66,6 +76,12 @@ export class AtencionRegController {
   @Post('reporte/gestante/:ipress')
   async reporte(@Param('ipress') ipress: string, @Body() body: any) {
     const resp = await this.atencionRegService.reporte_gestantes(ipress, body);
+    return resp;
+  }
+
+  @Post('pendientes/:renipres')
+  async pendientes(@Param('renipres') ipress: string, @Body() body: any) {
+    const resp = await this.atencionRegService.pendientes(ipress, body);
     return resp;
   }
 }

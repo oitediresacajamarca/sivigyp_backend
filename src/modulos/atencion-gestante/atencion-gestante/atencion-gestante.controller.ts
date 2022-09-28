@@ -42,7 +42,7 @@ export class AtencionGestanteController {
     }
 
     let atencion = await this.Atencion_Rep.findOne({
-      where: { ID_HC: hc.ID_HC },
+      where: { ID_HC: hc.ID_HC, ESTADO_ATENCION: 0 },
     });
 
     if (atencion == null) {
@@ -66,16 +66,17 @@ export class AtencionGestanteController {
           informacion_gestante_form.recien_nacidos_prematuros,
         RECIEN_NACIDOS_TERMINO:
           informacion_gestante_form.recien_nacidos_termino,
+        ESTADO_ACTUAL_GESTANTE: 'GESTANDO',
       });
-
-      try {
-        await this.Atencion_Rep.save(atencion);
-      } catch (e) {
-        throw new InternalServerErrorException('NO SE GUARDO EL PACIENTE');
-      }
-
-      return atencion;
     }
+
+    try {
+      await this.Atencion_Rep.save(atencion);
+    } catch (e) {
+      throw new InternalServerErrorException('NO SE GUARDO EL PACIENTE');
+    }
+
+    return atencion;
   }
   @Get(':nro_historia_clinica')
   async get_atencion(

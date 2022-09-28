@@ -20,7 +20,7 @@ export class AutentificacionService {
     const estado_login = await this.login_rep.findOne({
       where: { LOGIN: data.user, PASSWORD: data.password },
     });
-    console.log(data);
+
     if (estado_login) {
       return { user: estado_login.LOGIN, password: estado_login.PASSWORD };
     } else {
