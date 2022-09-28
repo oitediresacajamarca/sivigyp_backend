@@ -88,6 +88,7 @@ export class AtencionGestanteController {
 
     const atencion = await this.Atencion_Rep.findOne({
       where: { ID_HC: hcl.ID_HC, ESTADO_ATENCION: 0 },
+      relations: ['RIESGOS'],
     });
 
     if (atencion == null) {

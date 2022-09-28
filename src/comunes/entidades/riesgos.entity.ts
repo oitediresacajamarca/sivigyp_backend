@@ -6,7 +6,7 @@ export class RiesgosEntity {
   @PrimaryColumn()
   ID_RIESGO: number;
   @Column()
-  NOMBRE: string;
+  NOMBRE?: string;
   @ManyToMany(() => AtencionEntity, (data) => data.RIESGOS)
   @JoinTable({
     name: 'ATENCION_RIESGO',
@@ -16,5 +16,5 @@ export class RiesgosEntity {
       referencedColumnName: 'ID_ATENCION',
     },
   })
-  ATENCIONES: AtencionEntity[];
+  ATENCIONES?: AtencionEntity[];
 }

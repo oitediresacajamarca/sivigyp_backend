@@ -28,6 +28,7 @@ import { RedEntity } from './comunes/entidades/red.entity';
 import { AtencionPartoModule } from './resource/atencion-parto/atencion-parto.module';
 import { AtencionPartoEntity } from './resource/atencion-parto/entities/atencion-parto.entity';
 import { RptCbetaAcumEntity } from './comunes/entidades/rpt_cbeta_acum.entity';
+import { RiesgosModule } from './resource/riesgos/riesgos.module';
 
 @Module({
   imports: [
@@ -114,6 +115,7 @@ import { RptCbetaAcumEntity } from './comunes/entidades/rpt_cbeta_acum.entity';
     AutentificacionModule,
     PersonalModule,
     AtencionPartoModule,
+    RiesgosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
