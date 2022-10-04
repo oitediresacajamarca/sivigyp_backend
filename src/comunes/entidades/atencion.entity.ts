@@ -10,6 +10,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AtencionPuerperioEntity } from './atencion-puerperio.entity';
 import { HistoriaClinicaEntity } from './historia-clinica.entity';
 import { RiesgosEntity } from './riesgos.entity';
 
@@ -74,4 +75,7 @@ export class AtencionEntity {
     },
   })
   RIESGOS: RiesgosEntity[];
+  @OneToMany(() => AtencionPuerperioEntity, (data) => data.ATENCION)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  AtencionesPuerperios?: AtencionPuerperioEntity[];
 }

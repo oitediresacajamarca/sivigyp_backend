@@ -29,6 +29,11 @@ import { AtencionPartoModule } from './resource/atencion-parto/atencion-parto.mo
 import { AtencionPartoEntity } from './resource/atencion-parto/entities/atencion-parto.entity';
 import { RptCbetaAcumEntity } from './comunes/entidades/rpt_cbeta_acum.entity';
 import { RiesgosModule } from './resource/riesgos/riesgos.module';
+import { AtencionPuerperioModule } from './resource/atencion-puerperio/atencion-puerperio.module';
+import { AtencionPuerperioEntity } from './comunes/entidades/atencion-puerperio.entity';
+import { PadronGestanteModule } from './resource/padron-gestante/padron-gestante.module';
+import { PadronGestanteHisEntity } from './comunes/entidades/padron-gestante.entity';
+import { ReporteSeguimientoModule } from './resource/reporte_seguimiento/reporte_seguimiento.module';
 
 @Module({
   imports: [
@@ -59,6 +64,7 @@ import { RiesgosModule } from './resource/riesgos/riesgos.module';
         MicroredEntity,
         RedEntity,
         AtencionPartoEntity,
+        AtencionPuerperioEntity,
       ],
       extra: {
         validateConnection: false,
@@ -93,7 +99,7 @@ import { RiesgosModule } from './resource/riesgos/riesgos.module';
       synchronize: false,
       password: '.',
       database: 'BDHIS_MINSA',
-      entities: [RptCbetaAcumEntity],
+      entities: [RptCbetaAcumEntity, PadronGestanteHisEntity],
       pool: {
         max: 10,
         min: 0,
@@ -106,7 +112,7 @@ import { RiesgosModule } from './resource/riesgos/riesgos.module';
         statement_timeout: 80000,
       },
       options: { encrypt: false },
-      requestTimeout: 60_000,
+      requestTimeout: 360_000,
       name: 'BDHIS_MINSA',
     }),
     MaestrosModule,
@@ -116,6 +122,9 @@ import { RiesgosModule } from './resource/riesgos/riesgos.module';
     PersonalModule,
     AtencionPartoModule,
     RiesgosModule,
+    AtencionPuerperioModule,
+    PadronGestanteModule,
+    ReporteSeguimientoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

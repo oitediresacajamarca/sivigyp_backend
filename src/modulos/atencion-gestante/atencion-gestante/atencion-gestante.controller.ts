@@ -147,4 +147,12 @@ export class AtencionGestanteController {
     });
     return atencion_act;
   }
+  @Get('atencion_puerperio_parto/:ID_ATENCION')
+  async atencion_puerperio_parto(@Param('ID_ATENCION') ID_ATENCION: number) {
+    const resp = await this.Atencion_Rep.findOne({
+      where: { ID_ATENCION: ID_ATENCION },
+      relations: ['AtencionesPuerperios', 'PARTOS'],
+    });
+    return resp;
+  }
 }
