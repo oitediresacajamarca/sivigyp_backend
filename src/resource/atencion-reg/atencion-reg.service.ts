@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Like, Repository } from 'typeorm';
 import { CreateAtencionRegDto } from './dto/create-atencion-reg.dto';
 import { UpdateAtencionRegDto } from './dto/update-atencion-reg.dto';
 import { AtencionReg } from './entities/atencion-reg.entity';
@@ -38,7 +38,23 @@ export class AtencionRegService {
     const resp = await this.atencionreg_rep.find({
       where: { ID_ATENCION: term },
       order: { FECHA_ATENCION_REG: 'DESC' },
+      relations: ['ATENCION.HistoriaClinica.PERSONA'],
     });
+
+    const his = await this.rpt_cbeta.find({
+      where: {
+        Codigo_Item: In(['Z3491', 'Z3492', 'Z3493', 'Z3591', 'Z3592', 'Z3593']),
+        numero_documento:
+          resp[0].ATENCION.HistoriaClinica.PERSONA.NRO_DOCUMENTO,
+      },
+      order: { Anio: 'DESC', Mes: 'DESC', Dia: 'DESC' },
+    });
+    const his2 = his.map((aten_his) => {
+      return this.atencionreg_rep.create({
+        FECHA_ATENCION_REG: aten_his.fecha_atencion,
+      });
+    });
+
     const elegido = {};
     const hoy = new Date();
     let fecha_siguiente = new Date(2500, 1, 1);
@@ -75,7 +91,7 @@ export class AtencionRegService {
       return dat.ultima == true;
     });
 
-    return resp4;
+    return [...resp4, ...his2];
   }
 
   update(id: number, updateAtencionRegDto: UpdateAtencionRegDto) {
@@ -100,7 +116,7 @@ export class AtencionRegService {
 
     let citas: any[] = [];
     let semana_gestacion_it = 0;
-    let fecha_programada_it = aten.FUR_ATENCION;
+    let fecha_programada_it = aten.FECHA_ATENCION_PRENATAL;
     let count = 0;
 
     while (semana_gestacion_it < 30) {
@@ -255,7 +271,7 @@ export class AtencionRegService {
         'HistoriaClinica.COD_IPRESS=:IPRESS AND day(ATENCION_REG.FECHA_ATENCION_REG)=:day AND month(ATENCION_REG.FECHA_ATENCION_REG)=:mes AND year(ATENCION_REG.FECHA_ATENCION_REG)=:anio',
         { IPRESS: ipress, anio: anio, mes: mes, day: day },
       )
-      .andWhere('ATENCION_REG.ESTADO_ATENCION IN (1,0)')
+      .andWhere('ATENCION_REG.ESTADO_ATENCION IN (0,1)')
       .andWhere('ATENCION_REG.ESTADO_CERRADO IN (0)')
 
       .orderBy('ATENCION_REG.FECHA_ATENCION_REG', 'DESC')

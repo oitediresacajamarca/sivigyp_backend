@@ -48,6 +48,7 @@ export class AtencionPartoService {
       .leftJoinAndSelect('parto.ATENCION', 'Atencion')
       .leftJoinAndSelect('Atencion.HistoriaClinica', 'HistoriaClinica')
       .leftJoinAndSelect('HistoriaClinica.PERSONA', 'PERSONA')
+      .leftJoinAndSelect('parto.NACIMIENTOS', 'NACIMIENTOS')
       .where('Atencion.ID_ATENCION= :DOC', {
         DOC: id_atencion,
       })

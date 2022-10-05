@@ -15,25 +15,15 @@ export class PersonaRiscController {
 
   @Get(':numero_documento')
   async devolver_msp(@Param('numero_documento') numero_documento: string) {
-    let per = await this.Persona_rep.findOne({
-      where: { numero_documento: numero_documento },
-    });
+    const busc = await this.buscar_en_api_reniec(numero_documento);
+    console.log(busc);
+    const res = {
+      nombres: busc.nombres,
+      apellido_paterno: busc.apellidoPaterno,
+      apellido_materno: busc.apellidoMaterno,
+    };
 
-    if (per == null) {
-      const busc = await this.buscar_en_api_reniec(numero_documento);
-      per = this.Persona_rep.create({
-        nombres: busc.nombres,
-        apellido_paterno: busc.apellidoPaterno,
-        apellido_materno: busc.apellidoMaterno,
-      });
-      return per;
-    }
-
-    if (per == null) {
-      throw new NotFoundException('no se encontro numero de documento');
-    }
-
-    return per;
+    return res;
   }
 
   async buscar_en_api_reniec(numero_documento: string) {

@@ -27,6 +27,8 @@ export class AtencionEntity {
   @Column()
   FEC_REGISTRO: Date;
   @Column()
+  FECHA_ATENCION_PRENATAL: Date;
+  @Column()
   FUR_ATENCION: Date;
   @Column()
   NRO_GESTACIONES: number;

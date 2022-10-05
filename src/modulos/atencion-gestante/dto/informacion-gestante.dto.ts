@@ -5,6 +5,8 @@ export class InformacionGestanteDto {
   @IsString()
   fecha_registro: Date;
   @IsString()
+  fecha_atencion_prenatal: Date;
+  @IsString()
   fecha_ultima_regla: Date;
   @IsNumber()
   @Min(0)

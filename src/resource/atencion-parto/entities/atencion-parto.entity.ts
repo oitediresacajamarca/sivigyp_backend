@@ -1,9 +1,11 @@
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
+import { Nacimiento } from 'src/resource/nacimiento/entities/nacimiento.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -40,4 +42,7 @@ export class AtencionPartoEntity {
   @ManyToOne(() => AtencionEntity, (data) => data.PARTOS)
   @JoinColumn({ name: 'ID_ATENCION' })
   ATENCION: AtencionEntity;
+  @OneToMany(() => Nacimiento, (data) => data.PARTO)
+  @JoinColumn({ name: 'ID_PARTO' })
+  NACIMIENTOS: Nacimiento[];
 }

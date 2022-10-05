@@ -50,10 +50,11 @@ export class AtencionGestanteController {
         FEC_REGISTRO: informacion_gestante_form.fecha_registro,
         FECHA: informacion_gestante_form.fecha_registro,
         FUR_ATENCION: informacion_gestante_form.fecha_ultima_regla,
+        FECHA_ATENCION_PRENATAL:
+          informacion_gestante_form.fecha_atencion_prenatal,
         ID_HC: hc.ID_HC,
         ESTADO_ATENCION: 0,
-        FECHA_CONFIRMO_GESTACION:
-          informacion_para_gestacion_form.fecha_confirmacion_gestacion,
+        FECHA_CONFIRMO_GESTACION: null,
         FECHA_POSIBLE_PARTO:
           informacion_para_gestacion_form.fecha_probable_parto,
         HIJOS_VIVOS: informacion_gestante_form.numero_hijos_vivos,
@@ -69,14 +70,16 @@ export class AtencionGestanteController {
         ESTADO_ACTUAL_GESTANTE: 'GESTANDO',
       });
     }
-
+    let resp;
     try {
-      await this.Atencion_Rep.save(atencion);
+      resp = await this.Atencion_Rep.save(atencion);
     } catch (e) {
+      console.log(e.query);
       throw new InternalServerErrorException('NO SE GUARDO EL PACIENTE');
     }
 
-    return atencion;
+    console.log(resp);
+    return resp;
   }
   @Get(':nro_historia_clinica')
   async get_atencion(
@@ -125,6 +128,8 @@ export class AtencionGestanteController {
     const atencion_act = await this.Atencion_Rep.save({
       ID_ATENCION: aten.ID_ATENCION,
       FEC_REGISTRO: informacion_gestante_form.fecha_registro,
+      FECHA_ATENCION_PRENATAL:
+        informacion_gestante_form.fecha_atencion_prenatal,
       FECHA: informacion_gestante_form.fecha_registro,
       FUR_ATENCION: informacion_gestante_form.fecha_ultima_regla,
       ID_HC: hcl.ID_HC,

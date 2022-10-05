@@ -1,16 +1,18 @@
 import { Column, ViewEntity } from 'typeorm';
 
-@ViewEntity('rpt_plano_cbeta_acum')
+@ViewEntity('rpt_gestante')
 export class RptCbetaAcumEntity {
   @Column()
   Id_Cita: string;
+  @Column()
+  fecha_atencion: Date;
 
   @Column()
-  Anio: string;
+  Anio: number;
   @Column()
-  Mes: string;
+  Mes: number;
   @Column()
-  Dia: string;
+  Dia: number;
   @Column()
   Lote: string;
   @Column()
