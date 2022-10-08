@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PadronGestanteSivEntity } from 'src/comunes/entidades/padron-gestante-siv.entity';
 import { PadronGestanteHisEntity } from 'src/comunes/entidades/padron-gestante.entity';
 
 import { Repository } from 'typeorm';
@@ -11,13 +12,18 @@ export class PadronGestanteService {
   constructor(
     @InjectRepository(PadronGestanteHisEntity, 'BDHIS_MINSA')
     private padron_rep: Repository<PadronGestanteHisEntity>,
+    @InjectRepository(PadronGestanteSivEntity, 'db_svgyp')
+    private padron_rep_SIV: Repository<PadronGestanteSivEntity>,
   ) {}
   create(createPadronGestanteDto: CreatePadronGestanteDto) {
     return 'This action adds a new padronGestante';
   }
   get_padron(ambito: string) {
-    console.log(ambito);
     return this.padron_rep.find({ where: { RENIPRESS: ambito } });
+  }
+
+  get_padron_ipress_SIV(ambito: string) {
+    return this.padron_rep_SIV.find({ where: { COD_IPRESS: ambito } });
   }
 
   findAll() {

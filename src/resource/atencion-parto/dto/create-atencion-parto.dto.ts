@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { isNumber, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export class CreateAtencionPartoDto {
   @IsNumber()
@@ -39,4 +39,22 @@ export class CreateAtencionPartoDto {
   @IsNumber()
   @Type(() => Number)
   EDAD_GESTACIONAL: number;
+
+  @ValidateNested({ each: true })
+  @Type(() => CreateNacimientoDto)
+  NACIMIENTOS: CreateNacimientoDto[];
+}
+
+class CreateNacimientoDto {
+  @IsNumber()
+  @Type(() => Number)
+  RN_VIVO: number;
+
+  @IsNumber()
+  @Type(() => Number)
+  RN_SEXO: number;
+
+  @IsNumber()
+  @Type(() => Number)
+  RN_PESO: number;
 }

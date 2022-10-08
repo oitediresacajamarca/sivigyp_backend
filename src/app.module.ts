@@ -36,6 +36,8 @@ import { PadronGestanteHisEntity } from './comunes/entidades/padron-gestante.ent
 import { ReporteSeguimientoModule } from './resource/reporte_seguimiento/reporte_seguimiento.module';
 import { NacimientoModule } from './resource/nacimiento/nacimiento.module';
 import { Nacimiento } from './resource/nacimiento/entities/nacimiento.entity';
+import { PadronGestanteSivEntity } from './comunes/entidades/padron-gestante-siv.entity';
+import { ReporteSeguimiento } from './resource/reporte_seguimiento/entities/reporte_seguimiento.entity';
 
 @Module({
   imports: [
@@ -68,6 +70,8 @@ import { Nacimiento } from './resource/nacimiento/entities/nacimiento.entity';
         AtencionPartoEntity,
         AtencionPuerperioEntity,
         Nacimiento,
+        PadronGestanteSivEntity,
+        ReporteSeguimiento,
       ],
       extra: {
         validateConnection: false,

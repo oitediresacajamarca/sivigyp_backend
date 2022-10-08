@@ -25,7 +25,7 @@ export class AtencionPuerperioService {
       where: { ID_ATENCION: dto_cita.ID_ATENCION_PARTO },
       relations: ['ATENCION.AtencionesPuerperios'],
     });
-    console.log(atencion_parto);
+
     atencion_parto.ATENCION.AtencionesPuerperios = [];
     atencion_parto.ATENCION.AtencionesPuerperios.push({
       ESTADO_CERRADO: 0,
@@ -52,7 +52,7 @@ export class AtencionPuerperioService {
     const resp2 = await this.atencion_puerperio_rep.insert(
       atencion_parto.ATENCION.AtencionesPuerperios,
     );
-    console.log(resp2);
+
     return resp2;
   }
 

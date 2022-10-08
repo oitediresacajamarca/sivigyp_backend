@@ -43,6 +43,6 @@ export class AtencionPartoEntity {
   @JoinColumn({ name: 'ID_ATENCION' })
   ATENCION: AtencionEntity;
   @OneToMany(() => Nacimiento, (data) => data.PARTO)
-  @JoinColumn({ name: 'ID_PARTO' })
+  @JoinColumn({ name: 'ID_ATENCION_PARTO' })
   NACIMIENTOS: Nacimiento[];
 }

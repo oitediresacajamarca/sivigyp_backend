@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class NuevoPacienteDto {
   @IsString()
@@ -21,7 +21,7 @@ export class NuevoPacienteDto {
   @IsString()
   direccion: string;
   @IsString()
-  @IsEmail()
+  @IsOptional()
   correo: string;
   @IsString()
   numero_telefono: string;

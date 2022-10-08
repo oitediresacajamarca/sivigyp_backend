@@ -27,6 +27,11 @@ export class ReporteSeguimientoController {
     return this.reporteSeguimientoService.generar_reporte_seguimientO();
   }
 
+  @Get('generar_siv')
+  devolver_seguimiento_siv() {
+    return this.reporteSeguimientoService.genera_reporte_seguimiento_sivi();
+  }
+
   @Get()
   findAll() {
     return this.reporteSeguimientoService.findAll();

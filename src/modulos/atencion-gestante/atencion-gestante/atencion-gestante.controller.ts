@@ -74,11 +74,9 @@ export class AtencionGestanteController {
     try {
       resp = await this.Atencion_Rep.save(atencion);
     } catch (e) {
-      console.log(e.query);
       throw new InternalServerErrorException('NO SE GUARDO EL PACIENTE');
     }
 
-    console.log(resp);
     return resp;
   }
   @Get(':nro_historia_clinica')

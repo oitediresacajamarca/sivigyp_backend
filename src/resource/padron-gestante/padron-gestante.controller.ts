@@ -25,6 +25,11 @@ export class PadronGestanteController {
     return this.padronGestanteService.get_padron(ipress);
   }
 
+  @Get('SIV/:ipress')
+  get_padron_ipress_SIV(@Param('ipress') ipress: string) {
+    return this.padronGestanteService.get_padron_ipress_SIV(ipress);
+  }
+
   @Get()
   findAll() {
     return this.padronGestanteService.findAll();

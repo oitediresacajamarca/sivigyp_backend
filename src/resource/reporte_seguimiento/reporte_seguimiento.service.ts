@@ -5,6 +5,7 @@ import { PadronGestanteHisEntity } from 'src/comunes/entidades/padron-gestante.e
 import { Repository } from 'typeorm';
 import { CreateReporteSeguimientoDto } from './dto/create-reporte_seguimiento.dto';
 import { UpdateReporteSeguimientoDto } from './dto/update-reporte_seguimiento.dto';
+import { ReporteSeguimiento } from './entities/reporte_seguimiento.entity';
 
 @Injectable()
 export class ReporteSeguimientoService {
@@ -13,6 +14,8 @@ export class ReporteSeguimientoService {
     private padron_rep: Repository<PadronGestanteHisEntity>,
     @InjectRepository(AtencionEntity, 'db_svgyp')
     private Atencion_Rep: Repository<AtencionEntity>,
+    @InjectRepository(ReporteSeguimiento, 'db_svgyp')
+    private rep_sig_Rep: Repository<ReporteSeguimiento>,
   ) {}
   async generar_reporte_seguimientO() {
     const padron = await this.padron_rep.find();
@@ -25,7 +28,7 @@ export class ReporteSeguimientoService {
             DNI: gestante.NUMERO_DOCUMENTO,
           })
           .getOne();
-        console.log(gestante);
+   
         if (!!atencion) {
           return { ...gestante, fur: atencion.FUR_ATENCION };
         }
@@ -36,6 +39,10 @@ export class ReporteSeguimientoService {
 
     return { ...rest, cantidad: rest.length };
   }
+  async genera_reporte_seguimiento_sivi() {
+    return await this.rep_sig_Rep.find();
+  }
+
   create(createReporteSeguimientoDto: CreateReporteSeguimientoDto) {
     return 'This action adds a new reporteSeguimiento';
   }

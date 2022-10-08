@@ -50,9 +50,17 @@ export class AtencionRegService {
       order: { Anio: 'DESC', Mes: 'DESC', Dia: 'DESC' },
     });
     const his2 = his.map((aten_his) => {
-      return this.atencionreg_rep.create({
-        FECHA_ATENCION_REG: aten_his.fecha_atencion,
-      });
+      return {
+        ...this.atencionreg_rep.create({
+          FECHA_ATENCION_REG: aten_his.fecha_atencion,
+          EDAD_GESTACIONAL: moment(aten_his.fecha_atencion).diff(
+            resp[0].ATENCION.FUR_ATENCION,
+            'weeks',
+          ),
+          ESTADO_ATENCION: 5,
+        }),
+        LUGAR: aten_his.Nombre_Establecimiento,
+      };
     });
 
     const elegido = {};

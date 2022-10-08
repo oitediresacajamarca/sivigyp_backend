@@ -10,7 +10,7 @@ import {
 @Entity('NACIMIENTOS')
 export class Nacimiento {
   @PrimaryGeneratedColumn()
-  ID_NACIMIENTO: number;
+  ID_NACIMIENTO?: number;
   @Column()
   VIVO: number;
   @Column()
@@ -18,8 +18,8 @@ export class Nacimiento {
   @Column()
   PESO: number;
   @Column()
-  ID_PARTO: number;
+  ID_ATENCION_PARTO?: number;
   @ManyToOne(() => AtencionPartoEntity, (data) => data.NACIMIENTOS)
-  @JoinColumn({ name: 'ID_PARTO' })
-  PARTO: AtencionPartoEntity;
+  @JoinColumn({ name: 'ID_ATENCION_PARTO' })
+  PARTO?: AtencionPartoEntity;
 }

@@ -7,6 +7,8 @@ import { UpdateAtencionPartoDto } from './dto/update-atencion-parto.dto';
 import { AtencionPartoEntity } from './entities/atencion-parto.entity';
 import * as moment from 'moment';
 import { PersonaEntity } from 'src/comunes/entidades/persona.entity';
+import { NuevoPacienteDto } from 'src/modulos/gestante/dtos/nuevo-paciente-dto';
+import { Nacimiento } from '../nacimiento/entities/nacimiento.entity';
 
 @Injectable()
 export class AtencionPartoService {
@@ -17,6 +19,8 @@ export class AtencionPartoService {
     private atencion_rep: Repository<AtencionEntity>,
     @InjectRepository(PersonaEntity, 'db_svgyp')
     private persona_rep: Repository<PersonaEntity>,
+    @InjectRepository(Nacimiento, 'db_svgyp')
+    private nacimiento_rep: Repository<Nacimiento>,
   ) {}
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
     const atencion = await this.atencion_rep.findOne({
@@ -26,19 +30,31 @@ export class AtencionPartoService {
       atencion.FUR_ATENCION,
       'weeks',
     );
+
     const nuevo = this.atencion_parto_rep.create({
       EDAD_GESTACIONAL: semana_gestacion,
       FEC_REGISTRO: new Date(),
       FECHA_PARTO: createAtencionPartoDto.FECHA_PARTO,
       HORA_PARTO: createAtencionPartoDto.HORA_PARTO,
       ID_ATENCION: createAtencionPartoDto.ID_ATENCION,
-      RN_PESO: createAtencionPartoDto.RN_PESO,
-      RN_SEXO: createAtencionPartoDto.RN_SEXO,
-      RN_VIVO: createAtencionPartoDto.RN_VIVO,
+      RN_PESO: createAtencionPartoDto.NACIMIENTOS[0].RN_PESO,
+      RN_SEXO: createAtencionPartoDto.NACIMIENTOS[0].RN_SEXO,
+      RN_VIVO: createAtencionPartoDto.NACIMIENTOS[0].RN_VIVO,
       TIPO_PARTO: createAtencionPartoDto.TIPO_PARTO,
       TIPO_RECIEN_NACIDO: createAtencionPartoDto.TIPO_RECIEN_NACIDO,
+      NACIMIENTOS: [],
     });
+
+    createAtencionPartoDto.NACIMIENTOS.forEach((NACI) => {
+      nuevo.NACIMIENTOS.push({
+        GENERO: NACI.RN_SEXO,
+        PESO: NACI.RN_PESO,
+        VIVO: NACI.RN_VIVO,
+      });
+    });
+
     const res = await this.atencion_parto_rep.save(nuevo);
+    this.nacimiento_rep.save(nuevo.NACIMIENTOS);
     return res;
   }
 

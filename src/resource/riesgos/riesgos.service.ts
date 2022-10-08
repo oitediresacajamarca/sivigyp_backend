@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
 import { RiesgosEntity } from 'src/comunes/entidades/riesgos.entity';
 import { Repository } from 'typeorm';
@@ -25,6 +26,7 @@ export class RiesgosService {
     });
     aten.RIESGOS = [];
     aten.RIESGOS = body.RIESGOS;
+
 
     const resp = await this.atencion_rep.save(aten);
 
