@@ -56,6 +56,15 @@ export class AtencionPuerperioService {
     return resp2;
   }
 
+  async atender_cita(ID_ATENCION_PUERPERIO: number) {
+    const atencion_puerperio_rep = await this.atencion_puerperio_rep.findOne({
+      where: { ID_ATENCION_PUERPERIO: ID_ATENCION_PUERPERIO },
+    });
+    atencion_puerperio_rep.ESTADO_PUERPERIO = 2;
+    const resp = await this.atencion_puerperio_rep.save(atencion_puerperio_rep);
+    return { resp };
+  }
+
   findAll() {
     return `This action returns all atencionPuerperio`;
   }

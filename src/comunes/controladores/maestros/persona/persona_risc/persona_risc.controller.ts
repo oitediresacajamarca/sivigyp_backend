@@ -37,6 +37,9 @@ export class PersonaRiscController {
     const resp = await axios.get<any>(
       'http://datos.maxlimhoteleria.com/?dir=1&numero=' + numero_documento,
     );
+    console.log(resp.status);
+    if (resp != null) {
+    }
 
     if (resp.data.codVerifica == 1) {
       return resp.data;

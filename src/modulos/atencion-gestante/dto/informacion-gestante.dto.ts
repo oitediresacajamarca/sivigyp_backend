@@ -26,4 +26,7 @@ export class InformacionGestanteDto {
   @IsString()
   @IsOptional()
   observaciones: string;
+
+  @IsString()
+  fecha_probable_parto: Date;
 }

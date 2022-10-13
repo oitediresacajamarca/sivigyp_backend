@@ -7,8 +7,9 @@ import { UpdateAtencionPartoDto } from './dto/update-atencion-parto.dto';
 import { AtencionPartoEntity } from './entities/atencion-parto.entity';
 import * as moment from 'moment';
 import { PersonaEntity } from 'src/comunes/entidades/persona.entity';
-import { NuevoPacienteDto } from 'src/modulos/gestante/dtos/nuevo-paciente-dto';
+
 import { Nacimiento } from '../nacimiento/entities/nacimiento.entity';
+import { AtencionPuerperioEntity } from 'src/comunes/entidades/atencion-puerperio.entity';
 
 @Injectable()
 export class AtencionPartoService {
@@ -21,8 +22,11 @@ export class AtencionPartoService {
     private persona_rep: Repository<PersonaEntity>,
     @InjectRepository(Nacimiento, 'db_svgyp')
     private nacimiento_rep: Repository<Nacimiento>,
+    @InjectRepository(AtencionPuerperioEntity, 'db_svgyp')
+    private puerperio_rep: Repository<AtencionPuerperioEntity>,
   ) {}
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
+    console.log(createAtencionPartoDto);
     const atencion = await this.atencion_rep.findOne({
       where: { ID_ATENCION: createAtencionPartoDto.ID_ATENCION },
     });
@@ -30,6 +34,10 @@ export class AtencionPartoService {
       atencion.FUR_ATENCION,
       'weeks',
     );
+
+    if (createAtencionPartoDto.TIPO_PARTO == 3) {
+      createAtencionPartoDto.NACIMIENTOS[0].RN_SEXO = null;
+    }
 
     const nuevo = this.atencion_parto_rep.create({
       EDAD_GESTACIONAL: semana_gestacion,
@@ -45,6 +53,10 @@ export class AtencionPartoService {
       NACIMIENTOS: [],
     });
 
+    if (createAtencionPartoDto.TIPO_PARTO == 3) {
+      createAtencionPartoDto.NACIMIENTOS = [];
+    }
+
     createAtencionPartoDto.NACIMIENTOS.forEach((NACI) => {
       nuevo.NACIMIENTOS.push({
         GENERO: NACI.RN_SEXO,
@@ -55,6 +67,25 @@ export class AtencionPartoService {
 
     const res = await this.atencion_parto_rep.save(nuevo);
     this.nacimiento_rep.save(nuevo.NACIMIENTOS);
+  
+    const pri_puer = this.puerperio_rep.create({
+      ID_ATENCION: res.ID_ATENCION,
+      ESTADO_CERRADO: 0,
+      FECHA_ATENCION: moment(res.FECHA_PARTO).add(7, 'days').toDate(),
+      ESTADO_PUERPERIO: 0,
+      FECHA_REGISTRO: new Date(),
+      NRO_ATENCION: 1,
+    });
+    this.puerperio_rep.save(pri_puer);
+    const seg_puer = this.puerperio_rep.create({
+      ID_ATENCION: res.ID_ATENCION,
+      ESTADO_CERRADO: 0,
+      FECHA_ATENCION: moment(res.FECHA_PARTO).add(15, 'days').toDate(),
+      ESTADO_PUERPERIO: 0,
+      FECHA_REGISTRO: new Date(),
+      NRO_ATENCION: 2,
+    });
+    this.puerperio_rep.save(seg_puer);
     return res;
   }
 

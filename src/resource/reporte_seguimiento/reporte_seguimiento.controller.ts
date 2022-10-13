@@ -29,7 +29,13 @@ export class ReporteSeguimientoController {
 
   @Get('generar_siv')
   devolver_seguimiento_siv() {
-    return this.reporteSeguimientoService.genera_reporte_seguimiento_sivi();
+    return this.reporteSeguimientoService.genera_reporte_seguimiento_sivi_ob();
+  }
+  @Post('generar_siv_2')
+  devolver_seguimiento_siv_2(@Body() body: any) {
+    return this.reporteSeguimientoService.genera_reporte_seguimiento_sivi_ob_2(
+      body,
+    );
   }
 
   @Get()

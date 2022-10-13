@@ -1,5 +1,6 @@
 import { AtencionPartoEntity } from 'src/resource/atencion-parto/entities/atencion-parto.entity';
 import { AtencionReg } from 'src/resource/atencion-reg/entities/atencion-reg.entity';
+import { AtencionRegSemanaEntity } from 'src/resource/reporte_seguimiento/entities/atencion-reg-semana.entity';
 import {
   Column,
   Entity,
@@ -80,4 +81,8 @@ export class AtencionEntity {
   @OneToMany(() => AtencionPuerperioEntity, (data) => data.ATENCION)
   @JoinColumn({ name: 'ID_ATENCION' })
   AtencionesPuerperios?: AtencionPuerperioEntity[];
+
+  @OneToMany(() => AtencionRegSemanaEntity, (data) => data.ENCABESADO)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  ATENCIONES_SEMANALES: AtencionRegSemanaEntity[];
 }

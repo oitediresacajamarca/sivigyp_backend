@@ -14,7 +14,6 @@ import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
 import { HistoriaClinicaEntity } from 'src/comunes/entidades/historia-clinica.entity';
 import { Repository } from 'typeorm';
 
-import { DatosParaGestacionDto } from '../dto/datos-para-gestacion.dto';
 import { InformacionGestanteDto } from '../dto/informacion-gestante.dto';
 
 @Controller('atencion-gestante')
@@ -30,8 +29,6 @@ export class AtencionGestanteController {
     @Param('nro_historia_clinica') nro_historia_clinica: string,
     @Body('informacion_gestante_form')
     informacion_gestante_form: InformacionGestanteDto,
-    @Body('informacion_para_gestacion_form')
-    informacion_para_gestacion_form: DatosParaGestacionDto,
   ) {
     const hc = await this.Historia_Clinica_rep.findOne({
       where: { NRO_HCL: nro_historia_clinica },
@@ -55,8 +52,7 @@ export class AtencionGestanteController {
         ID_HC: hc.ID_HC,
         ESTADO_ATENCION: 0,
         FECHA_CONFIRMO_GESTACION: null,
-        FECHA_POSIBLE_PARTO:
-          informacion_para_gestacion_form.fecha_probable_parto,
+        FECHA_POSIBLE_PARTO: informacion_gestante_form.fecha_probable_parto,
         HIJOS_VIVOS: informacion_gestante_form.numero_hijos_vivos,
         NRO_GESTACIONES: informacion_gestante_form.numero_gestaciones,
         NUMERO_ABORTOS: informacion_gestante_form.numero_abortos,
@@ -112,8 +108,6 @@ export class AtencionGestanteController {
     @Param('nro_historia_clinica') nro_historia_clinica: string,
     @Body('informacion_gestante_form')
     informacion_gestante_form: InformacionGestanteDto,
-    @Body('informacion_para_gestacion_form')
-    informacion_para_gestacion_form: DatosParaGestacionDto,
   ) {
     const hcl = await this.Historia_Clinica_rep.findOne({
       where: { NRO_HCL: nro_historia_clinica },
@@ -132,9 +126,8 @@ export class AtencionGestanteController {
       FUR_ATENCION: informacion_gestante_form.fecha_ultima_regla,
       ID_HC: hcl.ID_HC,
       ESTADO_ATENCION: 0,
-      FECHA_CONFIRMO_GESTACION:
-        informacion_para_gestacion_form.fecha_confirmacion_gestacion,
-      FECHA_POSIBLE_PARTO: informacion_para_gestacion_form.fecha_probable_parto,
+      FECHA_CONFIRMO_GESTACION: null,
+      FECHA_POSIBLE_PARTO: informacion_gestante_form.fecha_probable_parto,
       HIJOS_VIVOS: informacion_gestante_form.numero_hijos_vivos,
       NRO_GESTACIONES: informacion_gestante_form.numero_gestaciones,
       NUMERO_ABORTOS: informacion_gestante_form.numero_abortos,

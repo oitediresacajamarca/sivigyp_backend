@@ -38,6 +38,7 @@ import { NacimientoModule } from './resource/nacimiento/nacimiento.module';
 import { Nacimiento } from './resource/nacimiento/entities/nacimiento.entity';
 import { PadronGestanteSivEntity } from './comunes/entidades/padron-gestante-siv.entity';
 import { ReporteSeguimiento } from './resource/reporte_seguimiento/entities/reporte_seguimiento.entity';
+import { AtencionRegSemanaEntity } from './resource/reporte_seguimiento/entities/atencion-reg-semana.entity';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { ReporteSeguimiento } from './resource/reporte_seguimiento/entities/repo
         Nacimiento,
         PadronGestanteSivEntity,
         ReporteSeguimiento,
+        AtencionRegSemanaEntity,
       ],
       extra: {
         validateConnection: false,

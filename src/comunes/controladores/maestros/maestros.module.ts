@@ -14,6 +14,8 @@ import { RiesgosController } from './riesgos/riesgos.controller';
 import { IpressController } from './ipress/ipress/ipress.controller';
 import { IpressEntity } from 'src/comunes/entidades/ipress.entity';
 import { HttpModule } from '@nestjs/axios';
+import { MicroredController } from './microred/microred.controller';
+import { MicroredEntity } from 'src/comunes/entidades/microred.entity';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { HttpModule } from '@nestjs/axios';
         GradoInstruccionEntity,
         RiesgosEntity,
         IpressEntity,
+        MicroredEntity,
       ],
       'db_svgyp',
     ),
@@ -40,6 +43,7 @@ import { HttpModule } from '@nestjs/axios';
     GradoInstruccionController,
     RiesgosController,
     IpressController,
+    MicroredController,
   ],
   exports: [],
 })
