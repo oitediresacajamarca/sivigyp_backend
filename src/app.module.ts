@@ -43,10 +43,16 @@ import { Establecimientos } from './comunes/entidades/establecimientos';
 import { EstadoCivilEntity } from './comunes/entidades/estado-civil.entity';
 import { TipoSeguroEntity } from './comunes/entidades/tipo-seguro.entity';
 import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto.entity';
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
     GestanteModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'sivigyp'),
+    }),
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: 'localhost',
@@ -167,6 +173,7 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
     PadronGestanteModule,
     ReporteSeguimientoModule,
     NacimientoModule,
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [AppService],
