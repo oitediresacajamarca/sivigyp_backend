@@ -39,6 +39,10 @@ import { Nacimiento } from './resource/nacimiento/entities/nacimiento.entity';
 import { PadronGestanteSivEntity } from './comunes/entidades/padron-gestante-siv.entity';
 import { ReporteSeguimiento } from './resource/reporte_seguimiento/entities/reporte_seguimiento.entity';
 import { AtencionRegSemanaEntity } from './resource/reporte_seguimiento/entities/atencion-reg-semana.entity';
+import { Establecimientos } from './comunes/entidades/establecimientos';
+import { EstadoCivilEntity } from './comunes/entidades/estado-civil.entity';
+import { TipoSeguroEntity } from './comunes/entidades/tipo-seguro.entity';
+import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto.entity';
 
 @Module({
   imports: [
@@ -74,6 +78,9 @@ import { AtencionRegSemanaEntity } from './resource/reporte_seguimiento/entities
         PadronGestanteSivEntity,
         ReporteSeguimiento,
         AtencionRegSemanaEntity,
+        EstadoCivilEntity,
+        TipoSeguroEntity,
+        TipoAtencionPartoEntity,
       ],
       extra: {
         validateConnection: false,
@@ -123,6 +130,31 @@ import { AtencionRegSemanaEntity } from './resource/reporte_seguimiento/entities
       options: { encrypt: false },
       requestTimeout: 360_000,
       name: 'BDHIS_MINSA',
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mssql',
+      //  host: '172.18.20.21',
+      host: 'localhost',
+      port: 1433,
+      username: 'sa',
+      synchronize: false,
+      password: '.',
+      database: 'db_svgyp',
+      entities: [Establecimientos],
+      pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000,
+      },
+      extra: {
+        validateConnection: false,
+        trustServerCertificate: true,
+        query_timeout: 80000,
+        statement_timeout: 80000,
+      },
+      options: { encrypt: false },
+      requestTimeout: 360_000,
+      name: 'ONE_VISION',
     }),
     MaestrosModule,
     AtencionGestanteModule,

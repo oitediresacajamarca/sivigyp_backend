@@ -1,4 +1,5 @@
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
+import { TipoAtencionPartoEntity } from 'src/comunes/entidades/tipo-atencion-parto.entity';
 import { Nacimiento } from 'src/resource/nacimiento/entities/nacimiento.entity';
 import {
   Column,
@@ -45,4 +46,7 @@ export class AtencionPartoEntity {
   @OneToMany(() => Nacimiento, (data) => data.PARTO)
   @JoinColumn({ name: 'ID_ATENCION_PARTO' })
   NACIMIENTOS: Nacimiento[];
+  @ManyToOne(() => TipoAtencionPartoEntity, (data) => data.ATENCIONES_PARTO)
+  @JoinColumn({ name: 'ID_ATENDIO_PARTO' })
+  TIPO_ATENCION_PARTO?: TipoAtencionPartoEntity;
 }

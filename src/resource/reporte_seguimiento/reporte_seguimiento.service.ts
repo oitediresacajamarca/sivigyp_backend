@@ -88,11 +88,24 @@ export class ReporteSeguimientoService {
       .leftJoinAndSelect('PERSONA.DISTRITO', 'DISTRITO')
       .leftJoinAndSelect('DISTRITO.PROVINCIA', 'PROVINCIA')
       .leftJoinAndSelect('HistoriaClinica.IPRESS', 'IPRESS')
+      .leftJoinAndSelect(
+        'HistoriaClinica.ESTADO_CIVIL_DESCRIPCION',
+        'ESTADO_CIVIL_DESCRIPCION',
+      )
+      .leftJoinAndSelect(
+        'HistoriaClinica.GRADO_INSTRUCCION_DESCRIPCION',
+        'GRADO_INSTRUCCION_DESCRIPCION',
+      )
+      .leftJoinAndSelect(
+        'HistoriaClinica.TIPO_SEGURO_DESCRIPCION',
+        'TIPO_SEGURO_DESCRIPCION',
+      )
 
       .leftJoinAndSelect('IPRESS.MICRORED', 'MICRORED')
       .leftJoinAndSelect('MICRORED.RED', 'RED')
       .leftJoinAndSelect('HistoriaClinica.CENTRO_POBLADO', 'CENTRO_POBLADO')
       .leftJoinAndSelect('ATENCION.PARTOS', 'PARTOS')
+      .leftJoinAndSelect('PARTOS.TIPO_ATENCION_PARTO', 'TIPO_ATENCION_PARTO')
 
       .where('(RED.ID_RED = :RED OR 1=:condicion_red)', {
         RED: parseInt(filtro.ID_RED),

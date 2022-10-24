@@ -5,12 +5,16 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AtencionEntity } from './atencion.entity';
 import { CentroPobladoEntity } from './centro-poblado.entity';
+import { EstadoCivilEntity } from './estado-civil.entity';
+import { GradoInstruccionEntity } from './grado-instruccion.entity';
 import { IpressEntity } from './ipress.entity';
 import { PersonaEntity } from './persona.entity';
+import { TipoSeguroEntity } from './tipo-seguro.entity';
 
 @Entity('HISTORIA_CLINICA')
 export class HistoriaClinicaEntity {
@@ -64,4 +68,19 @@ export class HistoriaClinicaEntity {
   @ManyToOne(() => CentroPobladoEntity, (data) => data.HISTORIAS_CLINICAS)
   @JoinColumn({ name: 'ID_CENTRO_POBLADO' })
   CENTRO_POBLADO?: CentroPobladoEntity;
+  @OneToOne(
+    () => EstadoCivilEntity,
+    (data) => {
+      data.HISTORIAS;
+    },
+  )
+  @JoinColumn({ name: 'ESTADO_CIVIL' })
+  ESTADO_CIVIL_DESCRIPCION: EstadoCivilEntity;
+
+  @ManyToOne(() => TipoSeguroEntity, (data) => data.HISTORIAS_CLINICAS)
+  @JoinColumn({ name: 'TIPO_SEGURO' })
+  TIPO_SEGURO_DESCRIPCION?: TipoSeguroEntity;
+  @ManyToOne(() => GradoInstruccionEntity, (data) => data.HISTORIAS_CLINICAS)
+  @JoinColumn({ name: 'ID_GRADO_INSTRUCCION' })
+  GRADO_INSTRUCCION_DESCRIPCION?: GradoInstruccionEntity;
 }

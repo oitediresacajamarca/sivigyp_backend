@@ -16,6 +16,8 @@ import { IpressEntity } from 'src/comunes/entidades/ipress.entity';
 import { HttpModule } from '@nestjs/axios';
 import { MicroredController } from './microred/microred.controller';
 import { MicroredEntity } from 'src/comunes/entidades/microred.entity';
+import { EstablecimientosOneController } from './establecimientos/establecimientos-one/establecimientos-one.controller';
+import { Establecimientos } from 'src/comunes/entidades/establecimientos';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { MicroredEntity } from 'src/comunes/entidades/microred.entity';
       'db_svgyp',
     ),
     TypeOrmModule.forFeature([MstPacienteEntity], 'risc_2030'),
+    TypeOrmModule.forFeature([Establecimientos], 'ONE_VISION'),
     HttpModule.register({
       timeout: 5000,
       maxRedirects: 5,
@@ -44,6 +47,7 @@ import { MicroredEntity } from 'src/comunes/entidades/microred.entity';
     RiesgosController,
     IpressController,
     MicroredController,
+    EstablecimientosOneController,
   ],
   exports: [],
 })

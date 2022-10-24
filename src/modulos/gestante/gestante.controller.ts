@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   Query,
@@ -178,6 +179,9 @@ export class GestanteController {
       where: { NRO_DOCUMENTO: persona.nro_documento },
     });
     let resp: any;
+    if (personas.length >= 1) {
+      throw new NotFoundException('ya existe en base de datos');
+    }
     if (personas.length == 0) {
       const este = this.Persona_Rep.create({
         NRO_DOCUMENTO: persona.nro_documento,

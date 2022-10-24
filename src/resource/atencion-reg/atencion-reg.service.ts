@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { In, LessThan, Like, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 import { CreateAtencionRegDto } from './dto/create-atencion-reg.dto';
 import { UpdateAtencionRegDto } from './dto/update-atencion-reg.dto';
 import { AtencionReg } from './entities/atencion-reg.entity';
@@ -46,6 +46,7 @@ export class AtencionRegService {
         Codigo_Item: In(['Z3491', 'Z3492', 'Z3493', 'Z3591', 'Z3592', 'Z3593']),
         numero_documento:
           resp[0].ATENCION.HistoriaClinica.PERSONA.NRO_DOCUMENTO,
+        fecha_atencion: MoreThan(resp[0].ATENCION.FUR_ATENCION),
       },
       order: { Anio: 'DESC', Mes: 'DESC', Dia: 'DESC' },
     });
@@ -284,8 +285,25 @@ export class AtencionRegService {
 
       .orderBy('ATENCION_REG.FECHA_ATENCION_REG', 'DESC')
       .limit(body.len)
-      .skip(body.pagina)
+      .skip((body.pagina - 1) * body.len)
       .getMany();
+
+    const total = await this.atencionreg_rep
+      .createQueryBuilder('ATENCION_REG')
+      .leftJoinAndSelect('ATENCION_REG.ATENCION', 'ATENCION')
+      .leftJoinAndSelect('ATENCION.HistoriaClinica', 'HistoriaClinica')
+      .leftJoinAndSelect('HistoriaClinica.PERSONA', 'PERSONA')
+      .leftJoinAndSelect('ATENCION.RIESGOS', 'RIESGOS')
+      .where(
+        'HistoriaClinica.COD_IPRESS=:IPRESS AND day(ATENCION_REG.FECHA_ATENCION_REG)=:day AND month(ATENCION_REG.FECHA_ATENCION_REG)=:mes AND year(ATENCION_REG.FECHA_ATENCION_REG)=:anio',
+        { IPRESS: ipress, anio: anio, mes: mes, day: day },
+      )
+      .andWhere('ATENCION_REG.ESTADO_ATENCION IN (0,1)')
+      .andWhere('ATENCION_REG.ESTADO_CERRADO IN (0)')
+
+      .orderBy('ATENCION_REG.FECHA_ATENCION_REG', 'DESC')
+
+      .getCount();
 
     /*  const rest2 = await this.atencionreg_rep.find({
       where: { FECHA_ATENCION_REG: LessThan(fecha) },
@@ -293,6 +311,6 @@ export class AtencionRegService {
       order: { FECHA_ATENCION_REG: 'DESC' },
     });*/
 
-    return rest;
+    return { data: rest, total: total };
   }
 }
