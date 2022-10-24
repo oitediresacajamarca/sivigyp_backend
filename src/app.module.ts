@@ -49,11 +49,11 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
     GestanteModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: 'localhost',
+      host: '172.18.20.27',
       port: 1433,
       username: 'sa',
       synchronize: false,
-      password: '.',
+      password: 'Intercambio1080',
       database: 'db_svgyp',
       entities: [
         PersonaEntity,
@@ -91,11 +91,11 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: 'localhost',
+      host: '172.18.20.20',
       port: 1433,
       username: 'sa',
       synchronize: false,
-      password: '.',
+      password: 'Intercambio1080',
       database: 'risc_2030',
       entities: [MstPacienteEntity],
       extra: {
@@ -109,11 +109,11 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: 'localhost',
+      host: '172.18.20.25',
       port: 1433,
       username: 'sa',
       synchronize: false,
-      password: '.',
+      password: 'Intercambio1080',
       database: 'BDHIS_MINSA',
       entities: [RptCbetaAcumEntity, PadronGestanteHisEntity],
       pool: {
@@ -134,12 +134,12 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
     TypeOrmModule.forRoot({
       type: 'mssql',
       //  host: '172.18.20.21',
-      host: 'localhost',
+      host: '172.18.20.21',
       port: 1433,
-      username: 'sa',
+      username: 'SIR01',
       synchronize: false,
-      password: '.',
-      database: 'db_svgyp',
+      password: 'bu5Hl0uY*LQw',
+      database: 'DIRESA',
       entities: [Establecimientos],
       pool: {
         max: 10,
