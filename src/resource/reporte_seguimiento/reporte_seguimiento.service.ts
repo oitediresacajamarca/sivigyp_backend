@@ -76,7 +76,7 @@ export class ReporteSeguimientoService {
   }
 
   async genera_reporte_seguimiento_sivi_ob_2(filtro: any) {
-    console.log(filtro);
+
     const resp = await this.Atencion_Rep.createQueryBuilder('ATENCION')
       .leftJoinAndSelect(
         'ATENCION.ATENCIONES_SEMANALES',
@@ -122,7 +122,7 @@ export class ReporteSeguimientoService {
       .take(10000)
 
       .getMany();
-    // console.log(resp);
+
 
     return resp;
   }

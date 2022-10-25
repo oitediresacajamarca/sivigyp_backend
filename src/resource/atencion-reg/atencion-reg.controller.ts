@@ -34,6 +34,8 @@ export class AtencionRegController {
   }
   @Post('atencion/generar_atencion_reg_sig/:id_atencion')
   generar_atencion_reg_sig(@Param('id_atencion') id_atencion: number) {
+
+
     return this.atencionRegService.generar_atencion_reg(
       id_atencion,
       new Date(),
