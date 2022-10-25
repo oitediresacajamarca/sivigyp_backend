@@ -50,18 +50,20 @@ import { join } from 'path';
 @Module({
   imports: [
     GestanteModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'sivigyp'),
-      
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: '172.18.20.27',
+      host: (() => {
+        return process.env.DB_SIVIGYP_HOST;
+      })(),
       port: 1433,
-      username: 'sa',
+      username: process.env.DB_USUARIO_SIVI,
       synchronize: false,
-      password: 'Intercambio1080',
-      database: 'db_svgyp',
+      password: process.env.DB_PASSWORD_SIVI,
+      database: process.env.DB_DATABASE_SIVI,
       entities: [
         PersonaEntity,
         HistoriaClinicaEntity,
@@ -98,12 +100,12 @@ import { join } from 'path';
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: '172.18.20.20',
+      host: process.env.DB_RISC_HOST,
       port: 1433,
-      username: 'sa',
+      username: process.env.DB_USUARIO_RISC,
       synchronize: false,
-      password: 'Intercambio1080',
-      database: 'risc_2030',
+      password: process.env.DB_PASSWORD_RISC,
+      database: process.env.DB_DATABASE_RISC,
       entities: [MstPacienteEntity],
       extra: {
         validateConnection: false,
@@ -116,12 +118,14 @@ import { join } from 'path';
     }),
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: '172.18.20.25',
+      host: (() => {
+        return process.env.DB_HISMINSA_HOST;
+      })(),
       port: 1433,
-      username: 'sa',
+      username: process.env.DB_USUARIO_HISMINSA,
       synchronize: false,
-      password: 'Intercambio1080',
-      database: 'BDHIS_MINSA',
+      password: process.env.DB_PASSWORD_HISMINSA,
+      database: process.env.DB_DATABASE_HISMINSA,
       entities: [RptCbetaAcumEntity, PadronGestanteHisEntity],
       pool: {
         max: 10,
@@ -141,12 +145,12 @@ import { join } from 'path';
     TypeOrmModule.forRoot({
       type: 'mssql',
       //  host: '172.18.20.21',
-      host: '172.18.20.21',
+      host: process.env.DB_ONEVISION_HOST,
       port: 1433,
-      username: 'SIR01',
+      username: process.env.DB_USUARIO_ONEVISION,
       synchronize: false,
-      password: 'bu5Hl0uY*LQw',
-      database: 'DIRESA',
+      password: process.env.DB_PASSWORD_ONEVISION,
+      database: process.env.DB_DATABASE_ONEVISION,
       entities: [Establecimientos],
       pool: {
         max: 10,
@@ -174,7 +178,6 @@ import { join } from 'path';
     PadronGestanteModule,
     ReporteSeguimientoModule,
     NacimientoModule,
-    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [AppService],
