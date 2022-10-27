@@ -46,6 +46,10 @@ import { TipoAtencionPartoEntity } from './comunes/entidades/tipo-atencion-parto
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { MultisectorialHechoModule } from './resource/multisectorial-hecho/multisectorial-hecho.module';
+import { MultisectorialHecho } from './resource/multisectorial-hecho/entities/multisectorial-hecho.entity';
+import { HisHechoMultisectorialEntity } from './comunes/entidades/his-hecho-multisectorial.entity';
+import { RptCbetaNinioEntity } from './comunes/entidades/rpt-cbeta-ninio.entity';
 
 @Module({
   imports: [
@@ -126,7 +130,11 @@ import { join } from 'path';
       synchronize: false,
       password: process.env.DB_PASSWORD_HISMINSA,
       database: process.env.DB_DATABASE_HISMINSA,
-      entities: [RptCbetaAcumEntity, PadronGestanteHisEntity],
+      entities: [
+        RptCbetaAcumEntity,
+        PadronGestanteHisEntity,
+        RptCbetaNinioEntity,
+      ],
       pool: {
         max: 10,
         min: 0,
@@ -167,6 +175,31 @@ import { join } from 'path';
       requestTimeout: 360_000,
       name: 'ONE_VISION',
     }),
+    TypeOrmModule.forRoot({
+      type: 'mssql',
+      //  host: '172.18.20.21',
+      host: process.env.DB_MULTI_HOST,
+      port: 1433,
+      username: process.env.DB_USUARIO_MULTI,
+      synchronize: false,
+      password: process.env.DB_PASSWORD_MULTI,
+      database: process.env.DB_MULTI_DATABASE,
+      entities: [HisHechoMultisectorialEntity],
+      pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000,
+      },
+      extra: {
+        validateConnection: false,
+        trustServerCertificate: true,
+        query_timeout: 80000,
+        statement_timeout: 80000,
+      },
+      options: { encrypt: false },
+      requestTimeout: 360_000,
+      name: 'MULTISECTORIAL',
+    }),
     MaestrosModule,
     AtencionGestanteModule,
     AtencionRegModule,
@@ -178,6 +211,7 @@ import { join } from 'path';
     PadronGestanteModule,
     ReporteSeguimientoModule,
     NacimientoModule,
+    MultisectorialHechoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

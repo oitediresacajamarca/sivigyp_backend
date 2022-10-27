@@ -146,7 +146,6 @@ export class AtencionRegService {
       });
     }
 
-   
     while (semana_gestacion_it >= 30 && semana_gestacion_it < 35) {
       count++;
       fecha_programada_it = moment(fecha_programada_it).add(15, 'day').toDate();
@@ -195,16 +194,13 @@ export class AtencionRegService {
         OBSERVACIONES: cita.OBSERVACION,
       };
     });
-   
-    for (let index = 0; index < atenciones.length; index++) {
 
-      await  this.atencionreg_rep.save(atenciones[index])
+    for (let index = 0; index < atenciones.length; index++) {
+      await this.atencionreg_rep.save(atenciones[index]);
     }
 
-
-
-  //await this.atencionreg_rep.save(atenciones);
-const resp5 = await this.findOneID_ATENCION(id_atencion);
+    //await this.atencionreg_rep.save(atenciones);
+    const resp5 = await this.findOneID_ATENCION(id_atencion);
 
     return resp5;
   }
