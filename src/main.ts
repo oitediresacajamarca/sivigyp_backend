@@ -7,13 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('ninio');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
     }),
   );
-  await app.listen(8006);
+  await app.listen(8007);
 }
 bootstrap();

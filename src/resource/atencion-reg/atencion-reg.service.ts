@@ -70,8 +70,9 @@ export class AtencionRegService {
 
     const resp2 = resp.map((aten) => {
       let nuevo = {};
+      let hace_30_dias=moment(hoy).add(-30,'day')
 
-      if (moment(aten.FECHA_ATENCION_REG).diff(hoy, 'days') >= 0) {
+      if ( aten.FECHA_ATENCION_REG>=  hace_30_dias.toDate()) {
         nuevo = { ...aten, est: 'pendiente' };
 
         if (aten.FECHA_ATENCION_REG < fecha_siguiente) {
@@ -87,8 +88,8 @@ export class AtencionRegService {
     const resp3 = resp2.map((dat: any) => {
       let nuevo;
       if (
-        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') ==
-        moment(fecha_siguiente).format('YYYY MM DD')
+        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') >=
+        moment(fecha_siguiente).format('YYYY MM DD') &&  moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD')<=moment().format('YYYY MM DD')
       ) {
         nuevo = { ...dat, ultima: true };
       } else {
