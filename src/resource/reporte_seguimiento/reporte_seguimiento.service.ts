@@ -107,6 +107,7 @@ export class ReporteSeguimientoService {
       .leftJoinAndSelect('HistoriaClinica.CENTRO_POBLADO', 'CENTRO_POBLADO')
       .leftJoinAndSelect('ATENCION.PARTOS', 'PARTOS')
       .leftJoinAndSelect('PARTOS.TIPO_ATENCION_PARTO', 'TIPO_ATENCION_PARTO')
+      .leftJoinAndSelect('ATENCION.AtencionesPuerperios', 'ATENCIONES_PUERPERIO')
 
       .where('(RED.ID_RED = :RED OR 1=:condicion_red)', {
         RED: parseInt(filtro.ID_RED),
@@ -120,7 +121,7 @@ export class ReporteSeguimientoService {
         ID_IPRESS: parseInt(filtro.ID_IPRESS),
         condicion_ipress: parseInt(filtro.ID_IPRESS) == 0 ? 1 : 2,
       })
-      .take(10000)
+      .take(30000)
 
       .getMany();
 
