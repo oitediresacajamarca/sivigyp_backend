@@ -36,7 +36,7 @@ export class AtencionRegService {
   }
   async findOneID_ATENCION(term: number) {
     const resp = await this.atencionreg_rep.find({
-      where: { ID_ATENCION: term },
+      where: { ID_ATENCION: term  },
       order: { FECHA_ATENCION_REG: 'DESC' },
       relations: ['ATENCION.HistoriaClinica.PERSONA'],
     });
