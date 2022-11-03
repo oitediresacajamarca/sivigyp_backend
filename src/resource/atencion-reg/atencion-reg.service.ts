@@ -325,6 +325,7 @@ export class AtencionRegService {
         'HistoriaClinica.COD_IPRESS=:IPRESS AND day(ATENCION_REG.FECHA_ATENCION_REG)=:day AND month(ATENCION_REG.FECHA_ATENCION_REG)=:mes AND year(ATENCION_REG.FECHA_ATENCION_REG)=:anio',
         { IPRESS: ipress, anio: anio, mes: mes, day: day },
       )
+      .andWhere('ATENCION.ESTADO_ATENCION IN (0)')
       .andWhere('ATENCION_REG.ESTADO_ATENCION IN (0,1)')
       .andWhere('ATENCION_REG.ESTADO_CERRADO IN (0)')
 
@@ -343,6 +344,7 @@ export class AtencionRegService {
         'HistoriaClinica.COD_IPRESS=:IPRESS AND day(ATENCION_REG.FECHA_ATENCION_REG)=:day AND month(ATENCION_REG.FECHA_ATENCION_REG)=:mes AND year(ATENCION_REG.FECHA_ATENCION_REG)=:anio',
         { IPRESS: ipress, anio: anio, mes: mes, day: day },
       )
+      .andWhere('ATENCION.ESTADO_ATENCION IN (0)')
       .andWhere('ATENCION_REG.ESTADO_ATENCION IN (0,1)')
       .andWhere('ATENCION_REG.ESTADO_CERRADO IN (0)')
 
