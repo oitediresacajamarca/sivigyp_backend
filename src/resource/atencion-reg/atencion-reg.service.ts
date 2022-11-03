@@ -21,7 +21,7 @@ export class AtencionRegService {
     private atencion_rep: Repository<AtencionEntity>,
     @InjectRepository(RptCbetaAcumEntity, 'BDHIS_MINSA')
     private rpt_cbeta: Repository<RptCbetaAcumEntity>,
-  ) {}
+  ) { }
   create(createAtencionRegDto: CreateAtencionRegDto) {
     return 'This action adds a new atencionReg';
   }
@@ -35,12 +35,16 @@ export class AtencionRegService {
     return resp;
   }
   async findOneID_ATENCION(term: number) {
+    //consulta citas por  atencion
     const resp = await this.atencionreg_rep.find({
-      where: { ID_ATENCION: term  },
+      where: { ID_ATENCION: term },
       order: { FECHA_ATENCION_REG: 'DESC' },
       relations: ['ATENCION.HistoriaClinica.PERSONA'],
     });
 
+    let fur = resp[0].ATENCION.FUR_ATENCION
+
+    //consulta atenciones de control en his
     const his = await this.rpt_cbeta.find({
       where: {
         Codigo_Item: In(['Z3491', 'Z3492', 'Z3493', 'Z3591', 'Z3592', 'Z3593']),
@@ -48,9 +52,10 @@ export class AtencionRegService {
           resp[0].ATENCION.HistoriaClinica.PERSONA.NRO_DOCUMENTO,
         fecha_atencion: MoreThan(resp[0].ATENCION.FUR_ATENCION),
       },
-      order: { fecha_atencion:'DESC' },
+      order: { fecha_atencion: 'DESC' },
     });
-    const his2 = his.map((aten_his) => {
+    //adaptamos las atenciones his al fromato de citas
+    let his2 = his.map((aten_his) => {
       return {
         ...this.atencionreg_rep.create({
           FECHA_ATENCION_REG: aten_his.fecha_atencion,
@@ -63,16 +68,49 @@ export class AtencionRegService {
         LUGAR: aten_his.Nombre_Establecimiento,
       };
     });
+    //verificamos cada cita con las atenciones en his
+  
+    let resp_c: any[] = resp.map(atencion_re => {
+
+
+      let coincide = his2.findIndex(j => {
+        return moment(j.FECHA_ATENCION_REG).format('DD MM YYYY') == moment(atencion_re.FECHA_ATENCION_REG).format('DD MM YYYY')
+      })
+
+
+
+      let ret={}
+
+      if (coincide > 0) {
+
+        ret = his2[coincide]
+        his2=his2.splice(coincide, 1)
+
+      } else {
+        ret = atencion_re
+      }
+     
+  
+
+
+      return ret
+
+    })
+    //unir cita con his
+    let cita_his=[...resp_c,his2]
+   cita_his= cita_his.sort((a, b) => { return (moment(a.FECHA_ATENCION_REG).diff(b.FECHA_ATENCION_REG,'day'))>0 ? 1 : -1 })
+
 
     const elegido = {};
     const hoy = new Date();
     let fecha_siguiente = new Date(2500, 1, 1);
+    
+//pendientes desde hoy y pasados
 
-    const resp2 = resp.map((aten) => {
+    const resp2 = cita_his.map((aten) => {
       let nuevo = {};
-      let hace_30_dias=moment(hoy).add(-30,'day')
 
-      if ( aten.FECHA_ATENCION_REG>=  hoy) {
+      if (aten.FECHA_ATENCION_REG >= hoy) {
         nuevo = { ...aten, est: 'pendiente' };
 
         if (aten.FECHA_ATENCION_REG < fecha_siguiente) {
@@ -88,8 +126,8 @@ export class AtencionRegService {
     const resp3 = resp2.map((dat: any) => {
       let nuevo;
       if (
-        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') <=
-        moment(fecha_siguiente).format('YYYY MM DD') 
+        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') ==
+        moment(fecha_siguiente).format('YYYY MM DD') ||( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1||dat.ESTADO_ATENCION == 2 )&& dat.FECHA_ATENCION_REG<=hoy)
       ) {
         nuevo = { ...dat, ultima: true };
       } else {
@@ -98,10 +136,11 @@ export class AtencionRegService {
       return nuevo;
     });
     const resp4 = resp3.filter((dat) => {
-      return dat.ultima == true;
+      return dat.ultima == true || dat.ESTADO_ATENCION == 5|| ( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1 ||dat.ESTADO_ATENCION == 2)&& dat.FECHA_ATENCION_REG<=hoy); 
     });
+    const resp5 = resp4.sort((a, b) => { return (a.FECHA_ATENCION_REG <= b.FECHA_ATENCION_REG) ? 1 : -1 })
 
-    return [...resp4, ...his2];
+    return [...resp5];
   }
 
   update(id: number, updateAtencionRegDto: UpdateAtencionRegDto) {
