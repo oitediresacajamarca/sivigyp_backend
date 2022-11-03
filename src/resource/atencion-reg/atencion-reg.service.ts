@@ -48,7 +48,7 @@ export class AtencionRegService {
           resp[0].ATENCION.HistoriaClinica.PERSONA.NRO_DOCUMENTO,
         fecha_atencion: MoreThan(resp[0].ATENCION.FUR_ATENCION),
       },
-      order: { Anio: 'DESC', Mes: 'DESC', Dia: 'DESC' },
+      order: { fecha_atencion:'DESC' },
     });
     const his2 = his.map((aten_his) => {
       return {
@@ -72,7 +72,7 @@ export class AtencionRegService {
       let nuevo = {};
       let hace_30_dias=moment(hoy).add(-30,'day')
 
-      if ( aten.FECHA_ATENCION_REG>=  hace_30_dias.toDate()) {
+      if ( aten.FECHA_ATENCION_REG>=  hoy) {
         nuevo = { ...aten, est: 'pendiente' };
 
         if (aten.FECHA_ATENCION_REG < fecha_siguiente) {
@@ -88,8 +88,8 @@ export class AtencionRegService {
     const resp3 = resp2.map((dat: any) => {
       let nuevo;
       if (
-        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') >=
-        moment(fecha_siguiente).format('YYYY MM DD') &&  moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD')<=moment().format('YYYY MM DD')
+        moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') <=
+        moment(fecha_siguiente).format('YYYY MM DD') 
       ) {
         nuevo = { ...dat, ultima: true };
       } else {
