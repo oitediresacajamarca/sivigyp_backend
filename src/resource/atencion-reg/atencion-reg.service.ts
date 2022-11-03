@@ -127,7 +127,7 @@ export class AtencionRegService {
       let nuevo;
       if (
         moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') ==
-        moment(fecha_siguiente).format('YYYY MM DD') ||( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1||dat.ESTADO_ATENCION == 2 )&& dat.FECHA_ATENCION_REG<=hoy)
+        moment(fecha_siguiente).format('YYYY MM DD') ||( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1||dat.ESTADO_ATENCION == 2 ||dat.ESTADO_ATENCION == 3 )&& dat.FECHA_ATENCION_REG<=hoy)
       ) {
         nuevo = { ...dat, ultima: true };
       } else {
@@ -136,7 +136,7 @@ export class AtencionRegService {
       return nuevo;
     });
     const resp4 = resp3.filter((dat) => {
-      return dat.ultima == true || dat.ESTADO_ATENCION == 5|| ( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1 ||dat.ESTADO_ATENCION == 2)&& dat.FECHA_ATENCION_REG<=hoy); 
+      return dat.ultima == true || dat.ESTADO_ATENCION == 5|| ( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1 ||dat.ESTADO_ATENCION == 2 ||dat.ESTADO_ATENCION == 3 )&& dat.FECHA_ATENCION_REG<=hoy); 
     });
     const resp5 = resp4.sort((a, b) => { return (a.FECHA_ATENCION_REG <= b.FECHA_ATENCION_REG) ? 1 : -1 })
 
