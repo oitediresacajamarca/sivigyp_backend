@@ -32,13 +32,14 @@ export class EstablecimientosOneController {
     return RESP;
   }
   @Get('ESTABLECIMIENTO/:origen/:filtro_microred')
-  devolver_establecimiento(
+  async devolver_establecimiento(
     @Param('origen') origen: string,
     @Param('filtro_microred') filtro_microred: number,
   ) {
-    this.es_rep.find({
+   const resp=await this.es_rep.find({
       where: { IdNivelesEstablecimientos: 6, idMicrored: filtro_microred },
     });
+    return resp
   }
 
   @Get('ESTABLECIMIENTO_ONE/:id')
