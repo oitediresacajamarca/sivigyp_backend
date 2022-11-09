@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Establecimientos } from 'src/comunes/entidades/establecimientos';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Controller('establecimientos-one')
 export class EstablecimientosOneController {
@@ -37,7 +37,7 @@ export class EstablecimientosOneController {
     @Param('filtro_microred') filtro_microred: number,
   ) {
    const resp=await this.es_rep.find({
-      where: { IdNivelesEstablecimientos: 6, idMicrored: filtro_microred },
+      where: { IdNivelesEstablecimientos:In([6,5]) , idMicrored: filtro_microred },
     });
     return resp
   }
