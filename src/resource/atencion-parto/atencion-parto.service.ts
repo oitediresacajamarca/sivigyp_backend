@@ -80,7 +80,7 @@ export class AtencionPartoService {
     const seg_puer = this.puerperio_rep.create({
       ID_ATENCION: res.ID_ATENCION,
       ESTADO_CERRADO: 0,
-      FECHA_ATENCION: moment(res.FECHA_PARTO).add(15, 'days').toDate(),
+      FECHA_ATENCION: moment(res.FECHA_PARTO).add(30, 'days').toDate(),
       ESTADO_PUERPERIO: 0,
       FECHA_REGISTRO: new Date(),
       NRO_ATENCION: 2,
