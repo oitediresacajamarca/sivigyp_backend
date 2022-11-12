@@ -50,6 +50,7 @@ import { MultisectorialHechoModule } from './resource/multisectorial-hecho/multi
 import { MultisectorialHecho } from './resource/multisectorial-hecho/entities/multisectorial-hecho.entity';
 import { HisHechoMultisectorialEntity } from './comunes/entidades/his-hecho-multisectorial.entity';
 import { RptCbetaNinioEntity } from './comunes/entidades/rpt-cbeta-ninio.entity';
+import { HelpersController } from './comunes/controladores/helpers/helpers.controller';
 
 @Module({
   imports: [
@@ -213,7 +214,7 @@ import { RptCbetaNinioEntity } from './comunes/entidades/rpt-cbeta-ninio.entity'
     NacimientoModule,
     MultisectorialHechoModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HelpersController],
   providers: [AppService],
 })
 export class AppModule {}
