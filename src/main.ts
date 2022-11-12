@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   process.env.TZ = 'America/Lima';
-  const app = await NestFactory.create(AppModule,{httpsOptions:{}});
+  const app = await NestFactory.create(AppModule);
   app.enableCors();
 
   app.setGlobalPrefix('api');

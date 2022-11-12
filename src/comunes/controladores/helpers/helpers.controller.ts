@@ -9,7 +9,7 @@ export class HelpersController {
         console.log(body.token)
 
         const resp = await axios.get('http://172.18.20.30:8050/api/user', { headers: { 'Authorization': 'Bearer ' + body.token } })
-            .then(data => { console.log(data); return data })
+            .then(data => { console.log(data); return data }).catch(error=>{console.log(error); return error})
         return resp
 
     }
