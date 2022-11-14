@@ -69,7 +69,7 @@ export class AtencionRegService {
       };
     });
     //verificamos cada cita con las atenciones en his
-  
+
     let resp_c: any[] = resp.map(atencion_re => {
 
 
@@ -79,33 +79,33 @@ export class AtencionRegService {
 
 
 
-      let ret={}
+      let ret = {}
 
       if (coincide > 0) {
 
         ret = his2[coincide]
-        his2=his2.splice(coincide, 1)
+        his2 = his2.splice(coincide, 1)
 
       } else {
         ret = atencion_re
       }
-     
-  
+
+
 
 
       return ret
 
     })
     //unir cita con his
-    let cita_his=[...resp_c,his2]
-   cita_his= cita_his.sort((a, b) => { return (moment(a.FECHA_ATENCION_REG).diff(b.FECHA_ATENCION_REG,'day'))>0 ? 1 : -1 })
+    let cita_his = [...resp_c, his2]
+    cita_his = cita_his.sort((a, b) => { return (moment(a.FECHA_ATENCION_REG).diff(b.FECHA_ATENCION_REG, 'day')) > 0 ? 1 : -1 })
 
 
     const elegido = {};
     const hoy = new Date();
     let fecha_siguiente = new Date(2500, 1, 1);
-    
-//pendientes desde hoy y pasados
+
+    //pendientes desde hoy y pasados
 
     const resp2 = cita_his.map((aten) => {
       let nuevo = {};
@@ -127,7 +127,7 @@ export class AtencionRegService {
       let nuevo;
       if (
         moment(dat.FECHA_ATENCION_REG).format('YYYY MM DD') ==
-        moment(fecha_siguiente).format('YYYY MM DD') ||( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1||dat.ESTADO_ATENCION == 2 ||dat.ESTADO_ATENCION == 3 )&& dat.FECHA_ATENCION_REG<=hoy)
+        moment(fecha_siguiente).format('YYYY MM DD') || ((dat.ESTADO_ATENCION == 0 || dat.ESTADO_ATENCION == 1 || dat.ESTADO_ATENCION == 2 || dat.ESTADO_ATENCION == 3) && dat.FECHA_ATENCION_REG <= hoy)
       ) {
         nuevo = { ...dat, ultima: true };
       } else {
@@ -136,7 +136,7 @@ export class AtencionRegService {
       return nuevo;
     });
     const resp4 = resp3.filter((dat) => {
-      return dat.ultima == true || dat.ESTADO_ATENCION == 5|| ( (dat.ESTADO_ATENCION == 0 ||dat.ESTADO_ATENCION == 1 ||dat.ESTADO_ATENCION == 2 ||dat.ESTADO_ATENCION == 3 )&& dat.FECHA_ATENCION_REG<=hoy); 
+      return dat.ultima == true || dat.ESTADO_ATENCION == 5 || ((dat.ESTADO_ATENCION == 0 || dat.ESTADO_ATENCION == 1 || dat.ESTADO_ATENCION == 2 || dat.ESTADO_ATENCION == 3) && dat.FECHA_ATENCION_REG <= hoy);
     });
     const resp5 = resp4.sort((a, b) => { return (a.FECHA_ATENCION_REG <= b.FECHA_ATENCION_REG) ? 1 : -1 })
 
@@ -359,5 +359,21 @@ export class AtencionRegService {
     });*/
 
     return { data: rest, total: total };
+  }
+
+  async nuevo(data: any) {
+    let fecha = data.FECHA_NUEVA_CITA;
+console.log(fecha)
+
+    const atencion = await this.atencion_rep.findOne({ where: { ID_ATENCION: data.ID_ATENCION } })
+
+    const edad_gest = moment(fecha).diff(atencion.FUR_ATENCION, 'weeks')
+
+
+    const nueva_atencion = this.atencionreg_rep.create({ ID_ATENCION: data.ID_ATENCION, FEC_REGISTRO: new Date(), ESTADO_ATENCION: 1, ESTADO_CERRADO: 0, FECHA_ATENCION_REG: fecha,EDAD_GESTACIONAL:edad_gest })
+    const nueva_atencion_save = await this.atencionreg_rep.save(nueva_atencion)
+    return nueva_atencion_save
+
+
   }
 }

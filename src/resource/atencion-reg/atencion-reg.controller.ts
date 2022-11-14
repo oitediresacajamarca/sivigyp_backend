@@ -86,4 +86,10 @@ export class AtencionRegController {
     const resp = await this.atencionRegService.pendientes(ipress, body);
     return resp;
   }
+  @Post('nuevo/')
+  async nuevo( @Body() body: any) {
+  
+    const resp = await this.atencionRegService.nuevo(body);
+    return resp;
+  }
 }
