@@ -34,6 +34,25 @@ export class AtencionPuerperioController {
     );
   }
 
+  @Post('reprogramar/:id_atencion_puerperio')
+  async reprogramar_cita(
+    @Param('id_atencion_puerperio') id_atencion_puerperio: number,@Body() body:any
+  ) {
+    return await this.atencionPuerperioService.reprogramar(
+      id_atencion_puerperio,
+      body.fecha
+    );
+  }
+
+  @Post('no_atender/:id_atencion_puerperio')
+  async no_atender_cita(
+    @Param('id_atencion_puerperio') id_atencion_puerperio: number,@Body() body:any
+  ) {
+    return await this.atencionPuerperioService.no_atender(
+      id_atencion_puerperio,
+      body
+    );
+  }
   @Post()
   create(@Body() createAtencionPuerperioDto: CreateAtencionPuerperioDto) {
     return this.atencionPuerperioService.create(createAtencionPuerperioDto);

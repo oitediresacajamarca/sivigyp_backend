@@ -65,6 +65,27 @@ export class AtencionPuerperioService {
     return { resp };
   }
 
+  async reprogramar(ID_ATENCION_PUERPERIO: number,fecha:any){
+    const atencion_puerperio_rep = await this.atencion_puerperio_rep.findOne({
+      where: { ID_ATENCION_PUERPERIO: ID_ATENCION_PUERPERIO },
+    });
+    atencion_puerperio_rep.FECHA_ATENCION = fecha;
+    const resp = await this.atencion_puerperio_rep.save(atencion_puerperio_rep);
+    return { resp };
+
+
+  }
+  async no_atender(ID_ATENCION_PUERPERIO: number,data:any){
+    const atencion_puerperio_rep = await this.atencion_puerperio_rep.findOne({
+      where: { ID_ATENCION_PUERPERIO: ID_ATENCION_PUERPERIO },
+    });
+    atencion_puerperio_rep.ESTADO_PUERPERIO=3;
+    const resp = await this.atencion_puerperio_rep.save(atencion_puerperio_rep);
+    return { resp };
+
+
+  }
+
   findAll() {
     return `This action returns all atencionPuerperio`;
   }
