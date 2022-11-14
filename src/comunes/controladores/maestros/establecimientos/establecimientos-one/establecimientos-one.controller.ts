@@ -49,4 +49,11 @@ export class EstablecimientosOneController {
     });
     return res;
   }
+  @Get('ESTABLECIMIENTO_ONE_SUP/:id')
+  async devolver_establecimiento_one_sup(@Param('id') id: number) {
+    const res = await this.es_rep.findOne({
+      where: { IdSuperior: id },
+    });
+    return res;
+  }
 }
