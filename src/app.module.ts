@@ -51,6 +51,9 @@ import { MultisectorialHecho } from './resource/multisectorial-hecho/entities/mu
 import { HisHechoMultisectorialEntity } from './comunes/entidades/his-hecho-multisectorial.entity';
 import { RptCbetaNinioEntity } from './comunes/entidades/rpt-cbeta-ninio.entity';
 import { HelpersController } from './comunes/controladores/helpers/helpers.controller';
+import { FichaCmiModule } from './resource/ficha_cmi/ficha_cmi.module';
+import { FichaCmi } from './resource/ficha_cmi/entities/ficha_cmi.entity';
+
 
 @Module({
   imports: [
@@ -135,6 +138,8 @@ import { HelpersController } from './comunes/controladores/helpers/helpers.contr
         RptCbetaAcumEntity,
         PadronGestanteHisEntity,
         RptCbetaNinioEntity,
+        FichaCmi
+        
       ],
       pool: {
         max: 10,
@@ -213,6 +218,8 @@ import { HelpersController } from './comunes/controladores/helpers/helpers.contr
     ReporteSeguimientoModule,
     NacimientoModule,
     MultisectorialHechoModule,
+    FichaCmiModule,
+
   ],
   controllers: [AppController, HelpersController],
   providers: [AppService],
