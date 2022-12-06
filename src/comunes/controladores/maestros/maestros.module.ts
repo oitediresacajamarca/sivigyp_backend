@@ -18,6 +18,8 @@ import { MicroredController } from './microred/microred.controller';
 import { MicroredEntity } from 'src/comunes/entidades/microred.entity';
 import { EstablecimientosOneController } from './establecimientos/establecimientos-one/establecimientos-one.controller';
 import { Establecimientos } from 'src/comunes/entidades/establecimientos';
+import { EstablecimientosController } from './nacional/establecimientos/establecimientos.controller';
+import { EstablecimientosNacEntity } from 'src/comunes/entidades/establecimientos_nac.entity/establecimientos_nac.entity';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { Establecimientos } from 'src/comunes/entidades/establecimientos';
         RiesgosEntity,
         IpressEntity,
         MicroredEntity,
+        EstablecimientosNacEntity
       ],
       'db_svgyp',
     ),
@@ -48,6 +51,7 @@ import { Establecimientos } from 'src/comunes/entidades/establecimientos';
     IpressController,
     MicroredController,
     EstablecimientosOneController,
+    EstablecimientosController,
   ],
   exports: [],
 })

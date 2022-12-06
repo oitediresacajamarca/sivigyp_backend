@@ -53,6 +53,7 @@ import { RptCbetaNinioEntity } from './comunes/entidades/rpt-cbeta-ninio.entity'
 import { HelpersController } from './comunes/controladores/helpers/helpers.controller';
 import { FichaCmiModule } from './resource/ficha_cmi/ficha_cmi.module';
 import { FichaCmi } from './resource/ficha_cmi/entities/ficha_cmi.entity';
+import { EstablecimientosNacEntity } from './comunes/entidades/establecimientos_nac.entity/establecimientos_nac.entity';
 
 
 @Module({
@@ -98,6 +99,7 @@ import { FichaCmi } from './resource/ficha_cmi/entities/ficha_cmi.entity';
         EstadoCivilEntity,
         TipoSeguroEntity,
         TipoAtencionPartoEntity,
+        EstablecimientosNacEntity
       ],
       extra: {
         validateConnection: false,

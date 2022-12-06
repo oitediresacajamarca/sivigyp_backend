@@ -264,4 +264,27 @@ export class GestanteController {
     );
     return resp;
   }
+
+  @Get('historia/:id_historia')
+  async devolver_historia_id_historia(@Param('id_historia') id_historia:number){
+  const historia= await this.Hcl_Rep.createQueryBuilder('HISTORIA_CLINICA').
+  leftJoinAndSelect('PERSONA','PERSONA').where('HISTORIA_CLINICA.ID_HC=:ID_HC',{ID_HC:id_historia}).getMany()
+  return historia
+
+  }
+
+  @Post('historia/:id_historia')
+  async actualizar_historia_id_historia(@Param('id_historia') id_historia:number,   @Body('persona') persona: NuevoPacienteDto,
+  @Body('datos_complementarios') datos_complementarios: DatosComplementarios){
+  const historia= await this.Hcl_Rep.findOne({where:{ID_HC:id_historia}})
+  historia.BENEFICIARIA_JUNTOS=persona.beneficiaria_juntos
+  historia.RELIGION=datos_complementarios.religion
+
+  historia.PERSONA.NOMBRES=persona.nombres
+
+  await this.Hcl_Rep.save(historia)
+
+  return historia
+
+  }
 }
