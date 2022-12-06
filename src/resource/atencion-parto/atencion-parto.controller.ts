@@ -43,8 +43,8 @@ export class AtencionPartoController {
     return this.atencionPartoService.update(+id, updateAtencionPartoDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete('atencion/:id_atencion')
+  remove(@Param('id_atencion') id: string) {
     return this.atencionPartoService.remove(+id);
   }
 }

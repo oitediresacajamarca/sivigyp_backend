@@ -10,6 +10,7 @@ import { PersonaEntity } from 'src/comunes/entidades/persona.entity';
 
 import { Nacimiento } from '../nacimiento/entities/nacimiento.entity';
 import { AtencionPuerperioEntity } from 'src/comunes/entidades/atencion-puerperio.entity';
+import { object } from 'joi';
 
 @Injectable()
 export class AtencionPartoService {
@@ -24,9 +25,9 @@ export class AtencionPartoService {
     private nacimiento_rep: Repository<Nacimiento>,
     @InjectRepository(AtencionPuerperioEntity, 'db_svgyp')
     private puerperio_rep: Repository<AtencionPuerperioEntity>,
-  ) {}
+  ) { }
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
-  
+
     const atencion = await this.atencion_rep.findOne({
       where: { ID_ATENCION: createAtencionPartoDto.ID_ATENCION },
     });
@@ -67,7 +68,7 @@ export class AtencionPartoService {
 
     const res = await this.atencion_parto_rep.save(nuevo);
     this.nacimiento_rep.save(nuevo.NACIMIENTOS);
-  
+
     const pri_puer = this.puerperio_rep.create({
       ID_ATENCION: res.ID_ATENCION,
       ESTADO_CERRADO: 0,
@@ -115,7 +116,13 @@ export class AtencionPartoService {
     return `This action updates a #${id} atencionParto`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} atencionParto`;
+  async remove(id: number) {
+    const elim = await this.atencion_parto_rep.findOne({ where: { ID_ATENCION_PARTO: id } })
+   const atenciones=await this.puerperio_rep.find({where:{ID_ATENCION:elim.ID_ATENCION}})
+   console.log(elim.ID_ATENCION)
+   await this.puerperio_rep.delete(atenciones.map(aten=>aten.ID_ATENCION_PUERPERIO))
+   
+    const resp = await this.atencion_parto_rep.delete(elim.ID_ATENCION_PARTO)
+    return resp
   }
 }
