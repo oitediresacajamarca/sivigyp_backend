@@ -363,7 +363,7 @@ export class AtencionRegService {
 
   async nuevo(data: any) {
     let fecha = data.FECHA_NUEVA_CITA;
-console.log(fecha)
+
 
     const atencion = await this.atencion_rep.findOne({ where: { ID_ATENCION: data.ID_ATENCION } })
 

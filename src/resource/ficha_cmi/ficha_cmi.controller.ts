@@ -9,7 +9,7 @@ export class FichaCmiController {
 
   @Post()
   create(@Body() createFichaCmiDto: any) {
-    console.log(createFichaCmiDto)
+
     return this.fichaCmiService.create(createFichaCmiDto);
   }
 

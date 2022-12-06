@@ -16,9 +16,17 @@ export class AtencionPuerperioService {
     private atencion_parto_rep: Repository<AtencionPartoEntity>,
     @InjectRepository(AtencionPuerperioEntity, 'db_svgyp')
     private atencion_puerperio_rep: Repository<AtencionPuerperioEntity>,
-  ) {}
-  create(createAtencionPuerperioDto: CreateAtencionPuerperioDto) {
-    return 'This action adds a new atencionPuerperio';
+  ) { }
+  async create(createAtencionPuerperioDto: any) {
+
+    const nuevo = this.atencion_puerperio_rep.create({
+      ID_ATENCION: createAtencionPuerperioDto.ID_ATENCION, ESTADO_CERRADO: 0, FECHA_ATENCION: createAtencionPuerperioDto.FECHA_NUEVA_CITA,
+      ESTADO_PUERPERIO: 0, FECHA_REGISTRO: new Date()
+    })
+    const resp = await this.atencion_puerperio_rep.save(nuevo)
+    return resp
+
+
   }
   async crear_citas(dto_cita: GenerarCitasPuerperioDto) {
     const atencion_parto = await this.atencion_parto_rep.findOne({
@@ -65,7 +73,7 @@ export class AtencionPuerperioService {
     return { resp };
   }
 
-  async reprogramar(ID_ATENCION_PUERPERIO: number,fecha:any){
+  async reprogramar(ID_ATENCION_PUERPERIO: number, fecha: any) {
     const atencion_puerperio_rep = await this.atencion_puerperio_rep.findOne({
       where: { ID_ATENCION_PUERPERIO: ID_ATENCION_PUERPERIO },
     });
@@ -75,11 +83,11 @@ export class AtencionPuerperioService {
 
 
   }
-  async no_atender(ID_ATENCION_PUERPERIO: number,data:any){
+  async no_atender(ID_ATENCION_PUERPERIO: number, data: any) {
     const atencion_puerperio_rep = await this.atencion_puerperio_rep.findOne({
       where: { ID_ATENCION_PUERPERIO: ID_ATENCION_PUERPERIO },
     });
-    atencion_puerperio_rep.ESTADO_PUERPERIO=3;
+    atencion_puerperio_rep.ESTADO_PUERPERIO = 3;
     const resp = await this.atencion_puerperio_rep.save(atencion_puerperio_rep);
     return { resp };
 
@@ -98,7 +106,10 @@ export class AtencionPuerperioService {
     return `This action updates a #${id} atencionPuerperio`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} atencionPuerperio`;
+  async remove(id: number) {
+
+    const resp = await this.atencion_puerperio_rep.delete(+id)
+    return resp
   }
+
 }

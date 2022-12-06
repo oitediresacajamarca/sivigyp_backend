@@ -38,7 +38,7 @@ export class MultisectorialHechoService {
     return `This action removes a #${id} multisectorialHecho`;
   }
   async detalle(filtro: any) {
-    console.log(filtro);
+
     /* const resp = await this.multi.find({
       where: {
         ID_UBICACION: Like(filtro.ambito + '%'),

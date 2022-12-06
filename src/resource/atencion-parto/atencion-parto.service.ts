@@ -118,9 +118,13 @@ export class AtencionPartoService {
 
   async remove(id: number) {
     const elim = await this.atencion_parto_rep.findOne({ where: { ID_ATENCION_PARTO: id } })
+
+
    const atenciones=await this.puerperio_rep.find({where:{ID_ATENCION:elim.ID_ATENCION}})
-   console.log(elim.ID_ATENCION)
+  
+  if(atenciones.length>0){
    await this.puerperio_rep.delete(atenciones.map(aten=>aten.ID_ATENCION_PUERPERIO))
+  }
    
     const resp = await this.atencion_parto_rep.delete(elim.ID_ATENCION_PARTO)
     return resp

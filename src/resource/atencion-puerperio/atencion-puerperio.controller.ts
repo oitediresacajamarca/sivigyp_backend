@@ -54,7 +54,7 @@ export class AtencionPuerperioController {
     );
   }
   @Post()
-  create(@Body() createAtencionPuerperioDto: CreateAtencionPuerperioDto) {
+  create(@Body() createAtencionPuerperioDto: any) {
     return this.atencionPuerperioService.create(createAtencionPuerperioDto);
   }
 
