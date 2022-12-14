@@ -276,6 +276,7 @@ export class GestanteController {
   @Post('historia/:id_historia')
   async actualizar_historia_id_historia(@Param('id_historia') id_historia:number,   @Body('persona') persona: NuevoPacienteDto,
   @Body('datos_complementarios') datos_complementarios: DatosComplementarios){
+    console.log(persona)
   const historia= await this.Hcl_Rep.findOne({where:{ID_HC:id_historia}})
   historia.BENEFICIARIA_JUNTOS=persona.beneficiaria_juntos
   historia.RELIGION=datos_complementarios.religion

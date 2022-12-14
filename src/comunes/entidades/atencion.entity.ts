@@ -12,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AtencionPuerperioEntity } from './atencion-puerperio.entity';
+import { AtencionesPpffEntity } from './atenciones_ppff.entity/atenciones_ppff.entity';
 import { HistoriaClinicaEntity } from './historia-clinica.entity';
 import { RiesgosEntity } from './riesgos.entity';
 
@@ -82,7 +83,13 @@ export class AtencionEntity {
   @JoinColumn({ name: 'ID_ATENCION' })
   AtencionesPuerperios?: AtencionPuerperioEntity[];
 
+  @OneToMany(() => AtencionesPpffEntity, (data) => data.ATENCION)
+  @JoinColumn({ name: 'ID_ATENCION' })
+  AtencionesPPPFF?: AtencionesPpffEntity[];
+
   @OneToMany(() => AtencionRegSemanaEntity, (data) => data.ENCABESADO)
   @JoinColumn({ name: 'ID_ATENCION' })
   ATENCIONES_SEMANALES: AtencionRegSemanaEntity[];
+
+
 }

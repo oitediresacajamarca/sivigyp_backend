@@ -54,6 +54,7 @@ import { HelpersController } from './comunes/controladores/helpers/helpers.contr
 import { FichaCmiModule } from './resource/ficha_cmi/ficha_cmi.module';
 import { FichaCmi } from './resource/ficha_cmi/entities/ficha_cmi.entity';
 import { EstablecimientosNacEntity } from './comunes/entidades/establecimientos_nac.entity/establecimientos_nac.entity';
+import { AtencionesPpffEntity } from './comunes/entidades/atenciones_ppff.entity/atenciones_ppff.entity';
 
 
 @Module({
@@ -99,7 +100,8 @@ import { EstablecimientosNacEntity } from './comunes/entidades/establecimientos_
         EstadoCivilEntity,
         TipoSeguroEntity,
         TipoAtencionPartoEntity,
-        EstablecimientosNacEntity
+        EstablecimientosNacEntity,
+        AtencionesPpffEntity
       ],
       extra: {
         validateConnection: false,

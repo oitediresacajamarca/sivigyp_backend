@@ -108,6 +108,7 @@ export class ReporteSeguimientoService {
       .leftJoinAndSelect('ATENCION.PARTOS', 'PARTOS')
       .leftJoinAndSelect('PARTOS.TIPO_ATENCION_PARTO', 'TIPO_ATENCION_PARTO')
       .leftJoinAndSelect('ATENCION.AtencionesPuerperios', 'ATENCIONES_PUERPERIO')
+      .leftJoinAndSelect('ATENCION.AtencionesPPPFF','ATENCIONES_PPFF')
 
       .where('(RED.ID_RED = :RED OR 1=:condicion_red)', {
         RED: parseInt(filtro.ID_RED),
@@ -124,6 +125,8 @@ export class ReporteSeguimientoService {
       .take(30000)
 
       .getMany();
+
+
 
     return resp;
   }

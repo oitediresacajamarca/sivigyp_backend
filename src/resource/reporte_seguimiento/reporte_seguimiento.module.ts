@@ -6,6 +6,7 @@ import { PadronGestanteHisEntity } from 'src/comunes/entidades/padron-gestante.e
 import { AtencionEntity } from 'src/comunes/entidades/atencion.entity';
 import { ReporteSeguimiento } from './entities/reporte_seguimiento.entity';
 import { AtencionRegSemanaEntity } from './entities/atencion-reg-semana.entity';
+import { AtencionesPpffEntity } from 'src/comunes/entidades/atenciones_ppff.entity/atenciones_ppff.entity';
 
 @Module({
   controllers: [ReporteSeguimientoController],
@@ -13,7 +14,7 @@ import { AtencionRegSemanaEntity } from './entities/atencion-reg-semana.entity';
   imports: [
     TypeOrmModule.forFeature([PadronGestanteHisEntity], 'BDHIS_MINSA'),
     TypeOrmModule.forFeature(
-      [AtencionEntity, ReporteSeguimiento, AtencionRegSemanaEntity],
+      [AtencionEntity, ReporteSeguimiento, AtencionRegSemanaEntity,AtencionesPpffEntity],
       'db_svgyp',
     ),
   ],

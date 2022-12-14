@@ -27,6 +27,7 @@ export class AtencionPartoService {
     private puerperio_rep: Repository<AtencionPuerperioEntity>,
   ) { }
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
+    
 
     const atencion = await this.atencion_rep.findOne({
       where: { ID_ATENCION: createAtencionPartoDto.ID_ATENCION },
@@ -38,7 +39,9 @@ export class AtencionPartoService {
 
     if (createAtencionPartoDto.TIPO_PARTO == 3) {
       createAtencionPartoDto.NACIMIENTOS[0].RN_SEXO = null;
+      createAtencionPartoDto.TIPO_RECIEN_NACIDO=3
     }
+
 
     const nuevo = this.atencion_parto_rep.create({
       EDAD_GESTACIONAL: semana_gestacion,

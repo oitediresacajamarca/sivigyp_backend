@@ -16,6 +16,9 @@ export class CreateAtencionPartoDto {
   @Type(() => Number)
   TIPO_PARTO: number;
   @IsString()
+  TIPO_LUGAR_PARTO: string;
+
+  @IsString()
   LUGAR_PARTO: string;
   @IsNumber()
   @Type(() => Number)
