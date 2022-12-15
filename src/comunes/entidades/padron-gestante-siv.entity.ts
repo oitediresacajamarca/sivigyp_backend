@@ -4,6 +4,8 @@ export class PadronGestanteSivEntity {
   @Column()
   RED: string;
   @Column()
+  MICRORED: string;
+  @Column()
   PROVINCIA: string;
   @Column()
   DISTRITO: string;
@@ -25,6 +27,9 @@ export class PadronGestanteSivEntity {
   EDAD: number;
   @Column()
   ESTADO_CIVIL: number;
+  @Column()
+  TIPO_DOCUMENTO: number;
+
   @Column()
   TIPO_SEGURO: number;
   @Column()

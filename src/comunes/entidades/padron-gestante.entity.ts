@@ -20,4 +20,6 @@ export class PadronGestanteHisEntity {
   APELLIDO_MATERNO: string;
   @Column()
   NOMBRES: string;
+  @Column()
+  TIPO_DOCUMENTO: number;
 }
