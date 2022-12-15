@@ -27,6 +27,7 @@ export class AtencionPartoService {
     private puerperio_rep: Repository<AtencionPuerperioEntity>,
   ) { }
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
+    console.log(createAtencionPartoDto)
     
 
     const atencion = await this.atencion_rep.findOne({
@@ -54,6 +55,9 @@ export class AtencionPartoService {
       RN_VIVO: createAtencionPartoDto.NACIMIENTOS[0].RN_VIVO,
       TIPO_PARTO: createAtencionPartoDto.TIPO_PARTO,
       TIPO_RECIEN_NACIDO: createAtencionPartoDto.TIPO_RECIEN_NACIDO,
+      LUGAR_PARTO:createAtencionPartoDto.LUGAR_PARTO,
+      TIPO_LUGAR_PARTO:createAtencionPartoDto.TIPO_LUGAR_PARTO,
+
       NACIMIENTOS: [],
     });
 

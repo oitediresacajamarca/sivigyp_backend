@@ -25,6 +25,8 @@ export class AtencionPartoEntity {
   @Column()
   LUGAR_PARTO: string;
   @Column()
+  TIPO_LUGAR_PARTO:string;
+  @Column()
   ID_ATENDIO_PARTO: number;
   @Column()
   TIPO_RECIEN_NACIDO: number;
