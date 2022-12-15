@@ -54,6 +54,7 @@ export class GestanteController {
     const resp = await this.Persona_Rep.find({
       where: { NRO_DOCUMENTO: nro_documento },
     });
+    console.log(nro_documento)
 
     let resp_final = await Promise.all(
       resp.map(async (pern) => {
@@ -276,16 +277,43 @@ export class GestanteController {
   @Post('historia/:id_historia')
   async actualizar_historia_id_historia(@Param('id_historia') id_historia:number,   @Body('persona') persona: NuevoPacienteDto,
   @Body('datos_complementarios') datos_complementarios: DatosComplementarios){
-    console.log(persona)
-  const historia= await this.Hcl_Rep.findOne({where:{ID_HC:id_historia}})
+    console.log(datos_complementarios)
+
+  const historia= await this.Hcl_Rep.findOne({where:{ID_HC:id_historia},relations:['PERSONA']})
+  console.log(historia)
+
   historia.BENEFICIARIA_JUNTOS=persona.beneficiaria_juntos
   historia.RELIGION=datos_complementarios.religion
 
   historia.PERSONA.NOMBRES=persona.nombres
+  historia.PERSONA.APELLIDO_PAT=persona.apellido_paterno
+  historia.PERSONA.APELLIDO_MAT=persona.apellido_materno
+  historia.PERSONA.FECHA_NAC=persona.fecha_nacimiento
+  historia.PERSONA.DIRECCION=persona.direccion
+  historia.PERSONA.ID_DISTRITO=persona.distrito
+  historia.ID_CENTRO_POBLADO=persona.centro_poblado
+  historia.PERSONA.DIRECCION=persona.direccion
+  historia.PERSONA.CORREO=persona.correo
+  historia.PERSONA.TELEFONO=persona.numero_telefono
+  historia.PERSONA.TELEFONO_ADICIONAL=persona.numero_telefono_adicional
+  historia.BENEFICIARIA_JUNTOS=persona.beneficiaria_juntos
+
+
+  historia.ID_GRADO_INSTRUCCION=datos_complementarios.grado_instruccion
+  historia.IDIOMA=datos_complementarios.idioma
+  historia.RELIGION=datos_complementarios.religion
+  historia.ESTADO_CIVIL=datos_complementarios.estado_civil
+  historia.TIPO_SEGURO=datos_complementarios.tipo_seguro
+  historia.GRUPO_SANGUINEO=datos_complementarios.grupo_sanguineo
+  historia.FACTOR_SANGUINEO=datos_complementarios.factor_sanguineo+''
+
+
+//  historia.PERSONA.DIRECCION=persona.fecha_nacimiento
 
   await this.Hcl_Rep.save(historia)
+  await this.Persona_Rep.save(  historia.PERSONA)
 
-  return historia
+  return historia 
 
   }
 }

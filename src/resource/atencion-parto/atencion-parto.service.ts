@@ -89,7 +89,9 @@ export class AtencionPartoService {
       FECHA_REGISTRO: new Date(),
       NRO_ATENCION: 2,
     });
-    this.puerperio_rep.save(seg_puer);
+/*  atencion.ESTADO_ATENCION=11
+  await  this.atencion_rep.save(atencion)*/
+  await  this.puerperio_rep.save(seg_puer);
     return res;
   }
 
