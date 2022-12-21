@@ -30,6 +30,11 @@ export class PadronGestanteController {
     return this.padronGestanteService.get_padron_ipress_SIV(ipress);
   }
 
+  @Post('SIV')
+  get_padron_ambi_SIV(@Body() ambito: string) {
+    return this.padronGestanteService.get_padron_ambito_siv(ambito);
+  }
+
   @Get()
   findAll() {
     return this.padronGestanteService.findAll();

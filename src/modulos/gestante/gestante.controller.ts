@@ -54,13 +54,17 @@ export class GestanteController {
     const resp = await this.Persona_Rep.find({
       where: { NRO_DOCUMENTO: nro_documento },
     });
-    console.log(nro_documento)
+  let noexistehistoria;
 
     let resp_final = await Promise.all(
       resp.map(async (pern) => {
         const res_det = await this.Hcl_Rep.find({
           where: { ID_PERSONA: pern.ID_PERSONA },
         });
+
+if(res_det.length==0){
+  noexistehistoria=true
+}
 
         return {
           ...pern,
@@ -69,10 +73,15 @@ export class GestanteController {
         };
       }),
     );
+  
     resp_final = await this.aniadir_ipress(resp_final);
     resp_final = await this.aniadir_ditrito(resp_final);
     resp_final = await this.aniadir_provincia(resp_final);
+    if(noexistehistoria==true){
+  // return []
+    }
 
+    console.log(resp_final)
     return resp_final;
   }
   @Get('persona_hc_por_ipress/:ipress')
@@ -277,10 +286,10 @@ export class GestanteController {
   @Post('historia/:id_historia')
   async actualizar_historia_id_historia(@Param('id_historia') id_historia:number,   @Body('persona') persona: NuevoPacienteDto,
   @Body('datos_complementarios') datos_complementarios: DatosComplementarios){
-    console.log(datos_complementarios)
+    
 
   const historia= await this.Hcl_Rep.findOne({where:{ID_HC:id_historia},relations:['PERSONA']})
-  console.log(historia)
+
 
   historia.BENEFICIARIA_JUNTOS=persona.beneficiaria_juntos
   historia.RELIGION=datos_complementarios.religion

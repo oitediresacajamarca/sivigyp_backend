@@ -56,4 +56,8 @@ export class PadronGestanteSivEntity {
   FECHA_PAP: Date;
   @Column()
   RIESGOS: string;
+  @Column()
+  ID_RED: string;
+  @Column()
+  ID_MICRORED: string;
 }
