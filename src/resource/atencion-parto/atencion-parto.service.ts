@@ -27,7 +27,7 @@ export class AtencionPartoService {
     private puerperio_rep: Repository<AtencionPuerperioEntity>,
   ) { }
   async create(createAtencionPartoDto: CreateAtencionPartoDto) {
-    console.log(createAtencionPartoDto)
+
     
 
     const atencion = await this.atencion_rep.findOne({

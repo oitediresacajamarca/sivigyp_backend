@@ -81,7 +81,7 @@ if(res_det.length==0){
   // return []
     }
 
-    console.log(resp_final)
+
     return resp_final;
   }
   @Get('persona_hc_por_ipress/:ipress')

@@ -27,7 +27,7 @@ export class PadronGestanteService {
   }
 
   async get_padron_ambito_siv(ambito:any){
-    console.log(ambito)
+  
  
    let ret={}
     ret= await this.padron_rep_SIV.createQueryBuilder('PADRON')
