@@ -42,6 +42,7 @@ export class PersonaRiscController {
     }
 
     if (resp.data.codVerifica == 1) {
+      console.log(resp.data)
       return resp.data;
     } else {
       throw new NotFoundException('no se encontro numero de documento');

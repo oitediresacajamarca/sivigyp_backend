@@ -42,6 +42,12 @@ export class AtencionRegService {
       relations: ['ATENCION.HistoriaClinica.PERSONA'],
     });
 
+
+    if(resp.length==0)
+    {
+      return []
+    }
+
     let fur = resp[0].ATENCION.FUR_ATENCION
 
     //consulta atenciones de control en his

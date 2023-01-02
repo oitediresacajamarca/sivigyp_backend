@@ -58,7 +58,6 @@ export class AtencionGestanteController {
         NUMERO_ABORTOS: informacion_gestante_form.numero_abortos,
         OBSERVACIONES: informacion_gestante_form.observaciones,
         FEC_ACTUALIZACION: new Date(),
-
         RECIEN_NACIDOS_PREMATUROS:
           informacion_gestante_form.recien_nacidos_prematuros,
         RECIEN_NACIDOS_TERMINO:

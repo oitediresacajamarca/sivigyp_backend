@@ -122,6 +122,7 @@ export class ReporteSeguimientoService {
         ID_IPRESS: parseInt(filtro.ID_IPRESS),
         condicion_ipress: parseInt(filtro.ID_IPRESS) == 0 ? 1 : 2,
       })
+    //.andWhere('PERSONA.NRO_DOCUMENTO=:NRO',{NRO:'73754351'})
       .take(30000)
 
       .getMany();

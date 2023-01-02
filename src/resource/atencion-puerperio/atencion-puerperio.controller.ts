@@ -25,12 +25,13 @@ export class AtencionPuerperioController {
     );
   }
 
-  @Get('atender/:id_atencion_puerperio')
+  @Post('atender/:id_atencion_puerperio')
   async atender_cita(
-    @Param('id_atencion_puerperio') id_atencion_puerperio: number,
+    @Param('id_atencion_puerperio') id_atencion_puerperio: number,@Body() body:any
   ) {
+    console.log(body)
     return await this.atencionPuerperioService.atender_cita(
-      id_atencion_puerperio,
+      id_atencion_puerperio,body
     );
   }
 
