@@ -196,7 +196,7 @@ if(res_det.length==0){
       const este = this.Persona_Rep.create({
         NRO_DOCUMENTO: persona.nro_documento,
         APELLIDO_PAT: persona.apellido_paterno,
-        APELLIDO_MAT: persona.apellido_paterno,
+        APELLIDO_MAT: persona.apellido_materno,
         CORREO: persona.correo,
         DIRECCION: persona.direccion,
         FECHA_NAC: persona.fecha_nacimiento,
